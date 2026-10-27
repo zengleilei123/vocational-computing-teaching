@@ -25,5 +25,7 @@ jobs:
         run: python -m unittest discover -s curriculum/python-programming/01-basics -p "test_*.py" -v
       - name: Test deterministic agent lab
         run: python -m unittest discover -s curriculum/ai-agent-development/01-tool-calling -p "test_*.py" -v
+      - name: Test LLM tool-calling lab without network
+        run: python -m unittest discover -s curriculum/ai-agent-development/02-llm-tool-calling -p "test_*.py" -v
       - name: Validate evaluation JSON
         run: python -m json.tool curriculum/ai-agent-development/01-tool-calling/evaluation-cases.json > /dev/null
