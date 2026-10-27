@@ -43,7 +43,11 @@
 - 课程目标应能通过练习或项目验收。
 - 使用公开或自行构造的数据；不提交个人隐私、商业机密或未经授权的材料。
 
-AI 智能体课程从 [课程大纲](curriculum/ai-agent-development/README.md) 开始，第一个本地工具调用实验位于 [01-tool-calling](curriculum/ai-agent-development/01-tool-calling/README.md)。该实验是确定性教学脚手架，并非真实 LLM 自主智能体。
+AI 智能体课程从 [课程大纲](curriculum/ai-agent-development/README.md) 开始，第一个本地工具调用实验位于 [01-tool-calling](curriculum/ai-agent-development/01-tool-calling/README.md)。实训 01 是确定性教学脚手架；实训 02 展示真实模型驱动的工具调用，并通过假客户端进行离线测试。
+
+## 自动检查
+
+GitHub Actions 会在 push 和 pull request 时运行 Python 编译检查、课程单元测试、智能体离线测试与 JSON 格式验证。通过状态以仓库 Actions 页面实际结果为准。
 
 ## 当前状态
 
