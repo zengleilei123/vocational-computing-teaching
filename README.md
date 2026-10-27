@@ -43,6 +43,8 @@
 - 课程目标应能通过练习或项目验收。
 - 使用公开或自行构造的数据；不提交个人隐私、商业机密或未经授权的材料。
 
+AI 智能体课程从 [课程大纲](curriculum/ai-agent-development/README.md) 开始，第一个本地工具调用实验位于 [01-tool-calling](curriculum/ai-agent-development/01-tool-calling/README.md)。该实验是确定性教学脚手架，并非真实 LLM 自主智能体。
+
 ## 当前状态
 
 项目正在逐步建设。每个模块的成熟度应以实际内容为准；设计初稿、已编写代码、已通过自动测试和已进行真实教学验证是不同状态，不应混为一谈。
