@@ -1,5 +1,7 @@
 # Vocational Computing Teaching
 
+[![Teaching repository checks](https://github.com/zengleilei123/vocational-computing-teaching/actions/workflows/teaching-checks.yml/badge.svg)](https://github.com/zengleilei123/vocational-computing-teaching/actions/workflows/teaching-checks.yml)
+
 面向高职计算机类专业的课程设计、编程教学、算法训练、软件工程实训与人工智能应用开发资源库。
 
 本仓库以“能讲清、能运行、能练习、能评价”为原则，持续沉淀可复用的教学材料与小型工程项目。它不是某所学校的官方课程，也不替代具体院校的人才培养方案。
@@ -48,7 +50,7 @@ AI 智能体课程从 [课程大纲](curriculum/ai-agent-development/README.md) 
 
 ## 自动检查
 
-GitHub Actions 会在 push 和 pull request 时运行 Python 编译检查、课程单元测试、智能体离线测试与 JSON 格式验证。通过状态以仓库 Actions 页面实际结果为准。
+GitHub Actions 会在 push 和 pull request 时运行 Python 编译检查、Python 基础课程测试、两类工具调用实训测试、RAG 检索测试与 JSON 格式验证。最新结果请查看上方状态徽章或 [Actions](https://github.com/zengleilei123/vocational-computing-teaching/actions)。离线测试通过不代表已验证真实模型 API 的兼容性、成本或线上表现。
 
 ## 当前状态
 
