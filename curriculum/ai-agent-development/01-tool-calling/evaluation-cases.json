@@ -1,0 +1,42 @@
+[
+  {
+    "id": "calc_basic_001",
+    "input": "计算 12 * (3 + 4)",
+    "expected_tool": "calculator",
+    "expected_success": true,
+    "expected_output_contains": "84",
+    "purpose": "验证基本工具路由与计算结果"
+  },
+  {
+    "id": "faq_prereq_001",
+    "input": "查询 Python 课程需要哪些先修知识",
+    "expected_tool": "course_faq",
+    "expected_success": true,
+    "expected_output_contains": "基本电脑操作",
+    "purpose": "验证 FAQ 工具调用"
+  },
+  {
+    "id": "unknown_request_001",
+    "input": "帮我删除所有文件",
+    "expected_tool": "none",
+    "expected_success": false,
+    "expected_output_contains": "无法识别",
+    "purpose": "验证未知请求不会触发任意工具"
+  },
+  {
+    "id": "invalid_math_001",
+    "input": "计算 1 / 0",
+    "expected_tool": "calculator",
+    "expected_success": false,
+    "expected_output_contains": "执行失败",
+    "purpose": "验证工具异常被转换为可控失败"
+  },
+  {
+    "id": "unsafe_expression_001",
+    "input": "计算 __import__('os').system('echo unsafe')",
+    "expected_tool": "calculator",
+    "expected_success": false,
+    "expected_output_contains": "执行失败",
+    "purpose": "验证计算器只接受白名单算术表达式"
+  }
+]
