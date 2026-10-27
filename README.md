@@ -21,6 +21,7 @@
 | 数据库与数据处理 | SQL、数据建模、Python 数据处理与可视化 | [路线图](ROADMAP.md) |
 | 软件工程实训 | Git、测试、日志、API、Linux 与部署 | [路线图](ROADMAP.md) |
 | **AI 智能体开发** | 智能体原理、工具调用、RAG、工作流、评测、安全与部署 | [AI 智能体课程](curriculum/ai-agent-development/README.md) |
+| 检索增强生成（RAG） | 关键词检索基线、证据来源、拒答与检索评测 | [RAG 实训 03](curriculum/ai-agent-development/03-rag/README.md) |
 | 综合项目 | 学生成绩分析系统、知识库问答助手、课程助教智能体 | [路线图](ROADMAP.md) |
 
 ## 目标学习者
@@ -43,7 +44,7 @@
 - 课程目标应能通过练习或项目验收。
 - 使用公开或自行构造的数据；不提交个人隐私、商业机密或未经授权的材料。
 
-AI 智能体课程从 [课程大纲](curriculum/ai-agent-development/README.md) 开始，第一个本地工具调用实验位于 [01-tool-calling](curriculum/ai-agent-development/01-tool-calling/README.md)。实训 01 是确定性教学脚手架；实训 02 展示真实模型驱动的工具调用，并通过假客户端进行离线测试。
+AI 智能体课程从 [课程大纲](curriculum/ai-agent-development/README.md) 开始，第一个本地工具调用实验位于 [01-tool-calling](curriculum/ai-agent-development/01-tool-calling/README.md)。[实训 02](curriculum/ai-agent-development/02-llm-tool-calling/README.md)展示真实模型驱动的工具调用，并通过假客户端进行离线测试；[实训 03](curriculum/ai-agent-development/03-rag/README.md)展示带来源的关键词检索基线。
 
 ## 自动检查
 
@@ -55,7 +56,7 @@ GitHub Actions 会在 push 和 pull request 时运行 Python 编译检查、课�
 
 ## 许可与引用
 
-本仓库新增原创材料拟采用 MIT License（代码）与 CC BY 4.0（教学文档）；在许可证文件补齐前，请勿将其视为已正式完成授权。引用第三方教材、图片、代码或数据时，应遵守原始许可并标明来源。
+本仓库原创代码许可见 [LICENSE-CODE](LICENSE-CODE)；原创教学文档许可说明见 [LICENSE-DOCS.md](LICENSE-DOCS.md)。引用第三方教材、图片、代码或数据时，应遵守原始许可并标明来源。
 
 ## 参与与反馈
 
