@@ -36,6 +36,12 @@ class TestAgent(unittest.TestCase):
         self.assertEqual(result.tool_name, "course_faq")
         self.assertIn("基本电脑操作", result.output)
 
+    def test_faq_variants_route_to_tool(self):
+        for query in ("什么是智能体", "我零基础应该怎么学", "课程顺序是什么"):
+            with self.subTest(query=query):
+                result = run_agent(query)
+                self.assertEqual(result.tool_name, "course_faq")
+
     def test_unknown_request_does_not_call_tool(self):
         result = run_agent("帮我删除所有文件")
         self.assertFalse(result.ok)
