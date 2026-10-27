@@ -10,6 +10,8 @@
 - [x] 建立 Python 基础教学单元初稿、示例和单元测试
 - [x] 增加 AI 智能体开发课程路线与第一个工具调用教学示例
 - [x] 增加智能体评测样例与综合项目评分量规
+- [x] 增加真实 LLM 驱动的工具调用课程与离线测试
+- [x] 增加 GitHub Actions 自动检查工作流
 - [ ] 在独立环境运行全部示例并记录测试结果
 - [ ] 补充完整课程的课件、作业与评分量规
 - [ ] 录制试讲并根据反馈修订
@@ -66,7 +68,7 @@
 
 ## Phase 5 — AI 智能体开发课程
 
-详细课程见 [AI 智能体开发课程大纲](curriculum/ai-agent-development/README.md)，第一个工具调用实验见 [实训 01](curriculum/ai-agent-development/01-tool-calling/README.md)，评测样例见 [evaluation-cases.json](curriculum/ai-agent-development/01-tool-calling/evaluation-cases.json)，项目评分量规见 [project-rubric.md](curriculum/ai-agent-development/project-rubric.md)。
+详细课程见 [AI 智能体开发课程大纲](curriculum/ai-agent-development/README.md)，第一个工具调用实验见 [实训 01](curriculum/ai-agent-development/01-tool-calling/README.md)，真实模型工具调用见 [实训 02](curriculum/ai-agent-development/02-llm-tool-calling/README.md)，评测样例见 [evaluation-cases.json](curriculum/ai-agent-development/01-tool-calling/evaluation-cases.json)，项目评分量规见 [project-rubric.md](curriculum/ai-agent-development/project-rubric.md)。
 
 课程定位：面向具备基础 Python 能力的高职计算机类学生，重点培养 AI 应用开发、调试、测试和部署能力，不以训练基础大模型为前置要求。
 
@@ -136,7 +138,7 @@
 | 第 2 月 | Python 核心语法与测试 | 4–6 个完整教学单元 |
 | 第 3 月 | 数据结构与算法 | 20 道带测试和讲解的题目 |
 | 第 4 月 | SQL、数据处理与综合项目 | 可运行的学生成绩分析系统 |
-| 第 5 月 | 大模型 API、结构化输出、工具调用 | 一个无需复杂框架的工具调用型智能体 |
+| 第 5 月 | 大模型 API、结构化输出、工具调用 | 离线确定性工具调用 + 真实模型工具调用示例 |
 | 第 6 月 | RAG、评测、安全与试讲 | 课程知识库助手、课程教案和试讲材料 |
 
 这是建议的个人研发路线，不是学校招聘的官方考纲或强制要求。
