@@ -29,5 +29,8 @@ jobs:
       - name: Test LLM tool-calling orchestration offline
         run: python -m unittest discover -s curriculum/ai-agent-development/02-llm-tool-calling -p "test_*.py" -v
 
+      - name: Test RAG retrieval lesson
+        run: python -m unittest discover -s curriculum/ai-agent-development/03-rag -p "test_*.py" -v
+
       - name: Validate evaluation JSON
         run: python -m json.tool curriculum/ai-agent-development/01-tool-calling/evaluation-cases.json > /dev/null
