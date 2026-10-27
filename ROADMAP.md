@@ -12,6 +12,8 @@
 - [x] 增加智能体评测样例与综合项目评分量规
 - [x] 增加真实 LLM 驱动的工具调用课程与离线测试
 - [x] 增加 GitHub Actions 自动检查工作流
+- [x] 增加带来源引用与拒答的关键词检索教学实训
+- [x] 增加代码与教学文档的许可说明
 - [ ] 在独立环境运行全部示例并记录测试结果
 - [ ] 补充完整课程的课件、作业与评分量规
 - [ ] 录制试讲并根据反馈修订
@@ -68,7 +70,7 @@
 
 ## Phase 5 — AI 智能体开发课程
 
-详细课程见 [AI 智能体开发课程大纲](curriculum/ai-agent-development/README.md)，第一个工具调用实验见 [实训 01](curriculum/ai-agent-development/01-tool-calling/README.md)，真实模型工具调用见 [实训 02](curriculum/ai-agent-development/02-llm-tool-calling/README.md)，评测样例见 [evaluation-cases.json](curriculum/ai-agent-development/01-tool-calling/evaluation-cases.json)，项目评分量规见 [project-rubric.md](curriculum/ai-agent-development/project-rubric.md)。
+详细课程见 [AI 智能体开发课程大纲](curriculum/ai-agent-development/README.md)，第一个工具调用实验见 [实训 01](curriculum/ai-agent-development/01-tool-calling/README.md)，真实模型工具调用见 [实训 02](curriculum/ai-agent-development/02-llm-tool-calling/README.md)，RAG 基线实训见 [实训 03](curriculum/ai-agent-development/03-rag/README.md)，评测样例见 [evaluation-cases.json](curriculum/ai-agent-development/01-tool-calling/evaluation-cases.json)，项目评分量规见 [project-rubric.md](curriculum/ai-agent-development/project-rubric.md)。
 
 课程定位：面向具备基础 Python 能力的高职计算机类学生，重点培养 AI 应用开发、调试、测试和部署能力，不以训练基础大模型为前置要求。
 
