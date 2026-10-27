@@ -114,7 +114,7 @@ def route_request(user_text: str) -> tuple[str, dict[str, Any]] | None:
     if match:
         return "calculator", {"expression": match.group(1)}
 
-    if any(keyword in text for keyword in ("先修知识", "学习顺序", "智能体是什么")):
+    if any(keyword in text.lower() for keyword in ("先修知识", "零基础", "电脑基础", "学习顺序", "课程顺序", "先学什么", "智能体是什么", "什么是智能体", "agent")):
         return "course_faq", {"query": text}
 
     return None
