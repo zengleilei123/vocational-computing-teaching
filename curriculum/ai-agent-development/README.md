@@ -100,7 +100,9 @@
 
 ## 6. 第一个实训：本地工具调用
 
-入口：[01-tool-calling](01-tool-calling/README.md)。
+入口：[实训 01：确定性工具调用](01-tool-calling/README.md)。
+
+下一步是 [实训 02：真实大模型驱动的工具调用](02-llm-tool-calling/README.md)，使用 OpenAI-compatible Chat Completions 工具调用接口。该单元包含离线假客户端测试，不需要在 CI 中配置密钥。
 
 该实训不需要 API Key，不连接外部服务。使用确定性路由器演示工具注册、参数验证、执行结果与终止条件。
 
