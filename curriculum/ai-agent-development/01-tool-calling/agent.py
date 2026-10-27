@@ -86,9 +86,13 @@ def course_faq_tool(arguments: dict[str, Any]) -> str:
     if not isinstance(query, str) or not query.strip():
         raise ValueError("query must be a non-empty string")
     normalized = query.strip().lower()
-    for key, answer in FAQ.items():
-        if key.lower() in normalized or normalized in key.lower():
-            return answer
+    # Match intent phrases rather than requiring the entire FAQ key to be contiguous.
+    if any(term in normalized for term in ("先修知识", "零基础", "电脑基础")):
+        return FAQ["python先修知识"]
+    if any(term in normalized for term in ("学习顺序", "课程顺序", "先学什么")):
+        return FAQ["课程学习顺序"]
+    if any(term in normalized for term in ("智能体是什么", "什么是智能体", "agent")):
+        return FAQ["智能体是什么"]
     return "课程资料中没有找到匹配条目，请补充资料或转人工核对。"
 
 
