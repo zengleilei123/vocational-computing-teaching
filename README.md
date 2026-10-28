@@ -6,6 +6,14 @@
 
 本仓库以“能讲清、能运行、能练习、能评价”为原则，持续沉淀可复用的教学材料与小型工程项目。它不是某所学校的官方课程，也不替代具体院校的人才培养方案。
 
+## 新增课程：AI 辅助应用开发（Vibe Coding 实训）
+
+[24 学时课程大纲](curriculum/ai-assisted-development/README.md) · [算法与开发基础取舍](curriculum/ai-assisted-development/FOUNDATIONS.md) · [六个教学单元](curriculum/ai-assisted-development/LESSONS.md) · [综合任务书](curriculum/ai-assisted-development/CAPSTONE.md)
+
+从现有机器人项目出发，学习需求拆解、代码上下文、AI 辅助实现、diff 审查、调试测试、版本回退和交付。建议的项目强化组合为 12 学时实用算法回顾 + 36 学时开发桥接 + 24 学时 AI 协作，不替代完整专业基础课程。
+
+**本轮新增的是课程设计、工作卡和考核材料，不是地图存档等新功能的实现。**基础作业是让学生将已有地图演示升级为本地作品集；读懂关键逻辑和验证结果是必修，不以聊天次数或付费模型额度评分。[提示与审查卡](curriculum/ai-assisted-development/WORK-CARDS.md) · [考核量规](curriculum/ai-assisted-development/ASSESSMENT.md) · [资料来源](curriculum/ai-assisted-development/SOURCES.md)
+
 ## 新增可玩项目：校园机器人挑战场
 
 [项目与启动说明](projects/robot_playground/README.md) · [四学时教学设计](projects/robot_playground/TEACHING.md) · [学生自选挑战](projects/robot_playground/CHALLENGES.md)
@@ -59,6 +67,7 @@ python -m unittest discover -s projects/classroom_practice -p "test_*.py" -v
 - **基础课程**：Python 程序设计、数据结构与算法、SQL 与数据库。
 - **工程能力**：需求分析、模块化开发、Git、测试、日志、部署和文档。
 - **AI 应用开发**：大模型 API、结构化输出、工具调用、RAG、智能体工作流、评测与安全。
+- **AI 辅助开发**：把 AI 用于编码工作流，而非把生成结果当成已验证交付。
 - **教学设计**：每个模块尽可能提供学习目标、教案、示例代码、分层练习、测试用例和评价标准。
 - **实践导向**：综合项目负责贯通，独立实训用于拆解知识点，避免只有代码或提示词合集。
 
@@ -68,6 +77,8 @@ python -m unittest discover -s projects/classroom_practice -p "test_*.py" -v
 |---|---|---|
 | Python 程序设计 | 基础语法、函数、数据结构、文件、异常与测试 | [课程单元 01](curriculum/python-programming/01-basics/README.md) |
 | 数据结构与算法 | 图、拓扑排序、复杂度与边界测试 | [CoursePilot 课程映射](docs/INTEGRATED-COURSE.md) |
+| 实用基础与开发桥接 | 数据结构够用、前后端、存储、调试与交付 | [基础取舍](curriculum/ai-assisted-development/FOUNDATIONS.md) |
+| AI 辅助应用开发 | Vibe Coding、需求、上下文、审查、验证、回退 | [独立课程](curriculum/ai-assisted-development/README.md) |
 | 数据库与数据处理 | CSV、SQL、数据建模、聚合与事务 | [CoursePilot 业务服务](projects/coursepilot/core.py) |
 | 软件工程实训 | 分层接口、依赖注入、HTTP、配置与测试 | [CoursePilot](projects/coursepilot/README.md) |
 | AI 智能体开发 | 工具调用、RAG、工作流、评测与安全 | [AI 智能体课程](curriculum/ai-agent-development/README.md) |
@@ -89,8 +100,8 @@ AI 实训 01 是确定性脚手架；[实训 02](curriculum/ai-agent-development
 
 GitHub Actions 保留 Python 基础课、两类工具调用、检索和 JSON 检查，并加入 CoursePilot 编译、单元/集成测试与离线回归，以及课堂三项目的业务测试和命令行演示。机器人挑战场增加 Python/HTTP 测试、JavaScript 语法检查及独立 Chromium 浏览器作业。通过状态看具体提交对应的 [Actions](https://github.com/zengleilei123/vocational-computing-teaching/actions)，不能仅以文件存在宣称功能通过。
 
-代码测试通过、真实模型 API 验证、容器运行成功和真实课堂有效是四种不同证据。当前项目以合成数据和教学场景验证；真实 API、容器构建与课堂效果仍需分别验证。
+代码测试通过、真实模型 API 验证、容器运行成功和真实课堂有效是四种不同证据。当前项目以合成数据和教学场景验证；真实 API、容器构建与课堂效果仍需分别验证。AI 辅助开发的新作业需要学生另行实现并补测试；现有 CI 不等于这些作业已经完成。
 
 ## 许可与引用
 
-原创代码许可见 [LICENSE-CODE](LICENSE-CODE)；原创教学文档说明见 [LICENSE-DOCS.md](LICENSE-DOCS.md)。第三方资料遵守原始许可。研究依据见 [课程映射](docs/INTEGRATED-COURSE.md#研究与设计依据2026-10-28-核对)、[课堂项目依据](projects/classroom_practice/SOURCES.md) 与 [可玩项目依据](projects/robot_playground/SOURCES.md)。
+原创代码许可见 [LICENSE-CODE](LICENSE-CODE)；原创教学文档说明见 [LICENSE-DOCS.md](LICENSE-DOCS.md)。第三方资料遵守原始许可。研究依据见 [课程映射](docs/INTEGRATED-COURSE.md#研究与设计依据2026-10-28-核对)、[课堂项目依据](projects/classroom_practice/SOURCES.md)、[可玩项目依据](projects/robot_playground/SOURCES.md) 与 [AI 辅助开发依据](curriculum/ai-assisted-development/SOURCES.md)。
