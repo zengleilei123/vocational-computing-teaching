@@ -20,7 +20,26 @@ python projects/coursepilot/app.py evaluate
 python -m unittest discover -s projects/coursepilot -p "test_*.py" -v
 ```
 
-默认完全离线，Python 3.10+ 标准库即可；可选真实模型入口须另配服务。当前没有网页工作台、训练后的分类模型或向量检索，不把这些后续方向写成已实现能力。
+默认完全离线，Python 3.10+ 标准库即可；可选真实模型入口须另配服务。CoursePilot 主流程尚无网页工作台、向量检索或分类工具接入；下面的课堂项目包已另行实现可训练的报修分类实验，不混淆独立模块与已集成能力。
+
+## 可直接布置的课堂实训
+
+[三项目总入口与课时安排](docs/CLASSROOM-PROJECTS.md) · [教师组织指南](projects/classroom_practice/TEACHER-GUIDE.md) · [学生提交模板](projects/classroom_practice/SUBMISSION.md)
+
+| 项目 | 训练重点 | 教学任务 |
+|---|---|---|
+| 实训室设备预约 | SQL、区间冲突、事务、幂等和并发 | [任务书](projects/classroom_practice/lessons/01-booking.md) |
+| 校园报修工单分类 | 标签、特征、朴素贝叶斯训练、指标与错例 | [任务书](projects/classroom_practice/lessons/02-tickets.md) |
+| 实训验收与补学计划 | 证据CSV、去重、回滚、原有Store与先修图 | [任务书](projects/classroom_practice/lessons/03-feedback.md) |
+
+```bash
+python -m projects.classroom_practice.app booking
+python -m projects.classroom_practice.app classify
+python -m projects.classroom_practice.app feedback
+python -m unittest discover -s projects/classroom_practice -p "test_*.py" -v
+```
+
+数据全部合成；参考实现已配测试，不代表真实课堂效果。教师人工验收的能力项证据可以接回 CoursePilot；不会自动把模型准确率当作学生成绩，也不实际派单或修改教务系统。
 
 ## 建设目标
 
@@ -40,6 +59,7 @@ python -m unittest discover -s projects/coursepilot -p "test_*.py" -v
 | 软件工程实训 | 分层接口、依赖注入、HTTP、配置与测试 | [CoursePilot](projects/coursepilot/README.md) |
 | AI 智能体开发 | 工具调用、RAG、工作流、评测与安全 | [AI 智能体课程](curriculum/ai-agent-development/README.md) |
 | 检索入门 | 关键词基线、来源、拒答 | [RAG 实训 03](curriculum/ai-agent-development/03-rag/README.md) |
+| 机器学习实训 | 字符特征、训练与验证/测试隔离、分类与误差分析 | [报修分类](projects/classroom_practice/lessons/02-tickets.md) |
 | 综合教学 | 同一业务逐层深化 | [课程映射](docs/INTEGRATED-COURSE.md) / [路线图](ROADMAP.md) |
 
 ## 目标学习者与使用方式
@@ -54,10 +74,10 @@ AI 实训 01 是确定性脚手架；[实训 02](curriculum/ai-agent-development
 
 ## 自动检查与验证范围
 
-GitHub Actions 保留 Python 基础课、两类工具调用、检索和 JSON 检查，并加入 CoursePilot 编译、单元/集成测试与离线回归。通过状态看具体提交对应的 [Actions](https://github.com/zengleilei123/vocational-computing-teaching/actions)，不能仅以文件存在宣称功能通过。
+GitHub Actions 保留 Python 基础课、两类工具调用、检索和 JSON 检查，并加入 CoursePilot 编译、单元/集成测试与离线回归，以及课堂三项目的业务测试和命令行演示。通过状态看具体提交对应的 [Actions](https://github.com/zengleilei123/vocational-computing-teaching/actions)，不能仅以文件存在宣称功能通过。
 
 代码测试通过、真实模型 API 验证、容器运行成功和真实课堂有效是四种不同证据。当前新增项目在合成数据上验证；真实 API、容器构建与课堂效果仍需分别验证。
 
 ## 许可与引用
 
-原创代码许可见 [LICENSE-CODE](LICENSE-CODE)；原创教学文档说明见 [LICENSE-DOCS.md](LICENSE-DOCS.md)。第三方资料遵守原始许可。研究依据见 [课程映射](docs/INTEGRATED-COURSE.md#研究与设计依据2026-10-28-核对)。
+原创代码许可见 [LICENSE-CODE](LICENSE-CODE)；原创教学文档说明见 [LICENSE-DOCS.md](LICENSE-DOCS.md)。第三方资料遵守原始许可。研究依据见 [课程映射](docs/INTEGRATED-COURSE.md#研究与设计依据2026-10-28-核对) 与 [课堂项目依据](projects/classroom_practice/SOURCES.md)。

@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Compile teaching examples
-        run: python -m compileall -q curriculum projects/coursepilot
+        run: python -m compileall -q curriculum projects
       - name: Test Python basics unit
         run: python -m unittest discover -s curriculum/python-programming/01-basics -p "test_*.py" -v
       - name: Test deterministic agent lab
@@ -35,3 +35,10 @@ jobs:
         run: python -m unittest discover -s projects/coursepilot -p "test_*.py" -v
       - name: Evaluate CoursePilot offline regression
         run: python projects/coursepilot/app.py evaluate
+      - name: Test classroom practice projects offline
+        run: python -m unittest discover -s projects/classroom_practice -p "test_*.py" -v
+      - name: Smoke test classroom command line demos
+        run: |
+          python -m projects.classroom_practice.app booking
+          python -m projects.classroom_practice.app classify
+          python -m projects.classroom_practice.app feedback
