@@ -6,6 +6,19 @@
 
 本仓库以“能讲清、能运行、能练习、能评价”为原则，持续沉淀可复用的教学材料与小型工程项目。它不是某所学校的官方课程，也不替代具体院校的人才培养方案。
 
+## 新增可玩项目：校园机器人挑战场
+
+[项目与启动说明](projects/robot_playground/README.md) · [四学时教学设计](projects/robot_playground/TEACHING.md) · [学生自选挑战](projects/robot_playground/CHALLENGES.md)
+
+设计地图让机器人送达，对比 BFS 的最少步数与 Dijkstra 的最低成本；画自己的方向符号，用 k-NN 教机器人识别，再用独立样本测试。支持网页操作、地图编辑、路线回放、实验导出，不需要 API Key 或 GPU。没有真实机器人控制、公开排行榜或自动成绩写入。
+
+```bash
+python -m projects.robot_playground.server --port 8765
+# 浏览器打开 http://127.0.0.1:8765
+```
+
+学生从“运行老师的代码”走向“设计自己的关卡、策略和数据”。[教学动机与项目总览](docs/PLAYFUL-PROJECTS.md)明确区分设计依据和真实课堂验证，不能用通关分数推断学习效果。
+
 ## 贯穿式主项目：CoursePilot
 
 从“我想学智能体，需要补什么？”出发，用同一套合成数据串起 **Python → CSV 数据处理 → SQL → 图算法 → 检索 → 工具调用 → 人工确认 → HTTP → 测试与部署**。RAG 只是其中一个环节。
@@ -74,10 +87,10 @@ AI 实训 01 是确定性脚手架；[实训 02](curriculum/ai-agent-development
 
 ## 自动检查与验证范围
 
-GitHub Actions 保留 Python 基础课、两类工具调用、检索和 JSON 检查，并加入 CoursePilot 编译、单元/集成测试与离线回归，以及课堂三项目的业务测试和命令行演示。通过状态看具体提交对应的 [Actions](https://github.com/zengleilei123/vocational-computing-teaching/actions)，不能仅以文件存在宣称功能通过。
+GitHub Actions 保留 Python 基础课、两类工具调用、检索和 JSON 检查，并加入 CoursePilot 编译、单元/集成测试与离线回归，以及课堂三项目的业务测试和命令行演示。机器人挑战场增加 Python/HTTP 测试、JavaScript 语法检查及独立 Chromium 浏览器作业。通过状态看具体提交对应的 [Actions](https://github.com/zengleilei123/vocational-computing-teaching/actions)，不能仅以文件存在宣称功能通过。
 
-代码测试通过、真实模型 API 验证、容器运行成功和真实课堂有效是四种不同证据。当前新增项目在合成数据上验证；真实 API、容器构建与课堂效果仍需分别验证。
+代码测试通过、真实模型 API 验证、容器运行成功和真实课堂有效是四种不同证据。当前项目以合成数据和教学场景验证；真实 API、容器构建与课堂效果仍需分别验证。
 
 ## 许可与引用
 
-原创代码许可见 [LICENSE-CODE](LICENSE-CODE)；原创教学文档说明见 [LICENSE-DOCS.md](LICENSE-DOCS.md)。第三方资料遵守原始许可。研究依据见 [课程映射](docs/INTEGRATED-COURSE.md#研究与设计依据2026-10-28-核对) 与 [课堂项目依据](projects/classroom_practice/SOURCES.md)。
+原创代码许可见 [LICENSE-CODE](LICENSE-CODE)；原创教学文档说明见 [LICENSE-DOCS.md](LICENSE-DOCS.md)。第三方资料遵守原始许可。研究依据见 [课程映射](docs/INTEGRATED-COURSE.md#研究与设计依据2026-10-28-核对)、[课堂项目依据](projects/classroom_practice/SOURCES.md) 与 [可玩项目依据](projects/robot_playground/SOURCES.md)。
