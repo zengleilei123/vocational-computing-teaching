@@ -6,60 +6,58 @@
 
 本仓库以“能讲清、能运行、能练习、能评价”为原则，持续沉淀可复用的教学材料与小型工程项目。它不是某所学校的官方课程，也不替代具体院校的人才培养方案。
 
+## 贯穿式主项目：CoursePilot
+
+从“我想学智能体，需要补什么？”出发，用同一套合成数据串起 **Python → CSV 数据处理 → SQL → 图算法 → 检索 → 工具调用 → 人工确认 → HTTP → 测试与部署**。RAG 只是其中一个环节。
+
+- [项目说明与运行](projects/coursepilot/README.md)
+- [完整课程映射：技术为什么需要、在哪实现、如何验收](docs/INTEGRATED-COURSE.md)
+- [90 分钟教学脚本与分层练习](projects/coursepilot/TEACHING.md)
+
+```bash
+python projects/coursepilot/app.py --db :memory: demo
+python projects/coursepilot/app.py evaluate
+python -m unittest discover -s projects/coursepilot -p "test_*.py" -v
+```
+
+默认完全离线，Python 3.10+ 标准库即可；可选真实模型入口须另配服务。当前没有网页工作台、训练后的分类模型或向量检索，不把这些后续方向写成已实现能力。
+
 ## 建设目标
 
 - **基础课程**：Python 程序设计、数据结构与算法、SQL 与数据库。
 - **工程能力**：需求分析、模块化开发、Git、测试、日志、部署和文档。
-- **AI 应用开发**：大模型 API、结构化输出、工具调用、RAG、智能体工作流、多智能体、评测与安全。
+- **AI 应用开发**：大模型 API、结构化输出、工具调用、RAG、智能体工作流、评测与安全。
 - **教学设计**：每个模块尽可能提供学习目标、教案、示例代码、分层练习、测试用例和评价标准。
-- **实践导向**：通过完整项目把知识点连接起来，而不是只收集零散代码或题解。
+- **实践导向**：综合项目负责贯通，独立实训用于拆解知识点，避免只有代码或提示词合集。
 
 ## 课程路线
 
 | 路线 | 主要内容 | 当前入口 |
 |---|---|---|
 | Python 程序设计 | 基础语法、函数、数据结构、文件、异常与测试 | [课程单元 01](curriculum/python-programming/01-basics/README.md) |
-| 数据结构与算法 | 复杂度、线性结构、哈希、排序查找、树图与基础算法思想 | [路线图](ROADMAP.md) |
-| 数据库与数据处理 | SQL、数据建模、Python 数据处理与可视化 | [路线图](ROADMAP.md) |
-| 软件工程实训 | Git、测试、日志、API、Linux 与部署 | [路线图](ROADMAP.md) |
-| **AI 智能体开发** | 智能体原理、工具调用、RAG、工作流、评测、安全与部署 | [AI 智能体课程](curriculum/ai-agent-development/README.md) |
-| 检索增强生成（RAG） | 关键词检索基线、证据来源、拒答与检索评测 | [RAG 实训 03](curriculum/ai-agent-development/03-rag/README.md) |
-| 综合项目 | 学生成绩分析系统、知识库问答助手、课程助教智能体 | [路线图](ROADMAP.md) |
+| 数据结构与算法 | 图、拓扑排序、复杂度与边界测试 | [CoursePilot 课程映射](docs/INTEGRATED-COURSE.md) |
+| 数据库与数据处理 | CSV、SQL、数据建模、聚合与事务 | [CoursePilot 业务服务](projects/coursepilot/core.py) |
+| 软件工程实训 | 分层接口、依赖注入、HTTP、配置与测试 | [CoursePilot](projects/coursepilot/README.md) |
+| AI 智能体开发 | 工具调用、RAG、工作流、评测与安全 | [AI 智能体课程](curriculum/ai-agent-development/README.md) |
+| 检索入门 | 关键词基线、来源、拒答 | [RAG 实训 03](curriculum/ai-agent-development/03-rag/README.md) |
+| 综合教学 | 同一业务逐层深化 | [课程映射](docs/INTEGRATED-COURSE.md) / [路线图](ROADMAP.md) |
 
-## 目标学习者
+## 目标学习者与使用方式
 
-主要面向高职计算机类专业学生，也适合需要系统复习编程与工程实践的初学者。默认读者具备基本计算机操作能力，但不假设其已有扎实的编程基础。
+面向高职计算机类学生和初学者。零基础先学 Python，再进入综合项目；不要直接要求学生一次读完所有代码。教师可先使用 [教案模板](docs/templates/lesson-plan-template.md)，再按项目的分层任务组织课堂。
 
-## 如何使用
+AI 实训 01 是确定性脚手架；[实训 02](curriculum/ai-agent-development/02-llm-tool-calling/README.md)演示真实模型工具调用接口、通过假客户端离线测试；实训 03 为关键词检索。CoursePilot 将这些概念接到同一业务与数据上，而不是重复增加孤立 Demo。
 
-1. 从 [课程路线图](ROADMAP.md) 了解学习顺序。
-2. 阅读相应单元的 README，先完成基础任务。
-3. 运行示例并执行测试，再完成提高任务。
-4. 最后独立完成综合项目，并根据评分标准自查。
+## 质量与安全
 
-## 质量原则
+示例必须有运行方法、输入输出、约束和测试；参考答案解释原因。智能体需要工具权限、失败处理、预算和人工确认边界。只提交公开或自行构造的数据，不提交真实学生信息、商业机密、密钥或未经授权材料。完整规范见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
-- 示例代码应可运行，并注明运行环境。
-- 题目应有明确输入、输出、约束和测试。
-- 参考答案应解释思路，不只给出代码。
-- 智能体课程必须明确工具权限、失败处理、评测和人工确认边界。
-- 课程目标应能通过练习或项目验收。
-- 使用公开或自行构造的数据；不提交个人隐私、商业机密或未经授权的材料。
+## 自动检查与验证范围
 
-AI 智能体课程从 [课程大纲](curriculum/ai-agent-development/README.md) 开始，第一个本地工具调用实验位于 [01-tool-calling](curriculum/ai-agent-development/01-tool-calling/README.md)。[实训 02](curriculum/ai-agent-development/02-llm-tool-calling/README.md)展示真实模型驱动的工具调用，并通过假客户端进行离线测试；[实训 03](curriculum/ai-agent-development/03-rag/README.md)展示带来源的关键词检索基线。
+GitHub Actions 保留 Python 基础课、两类工具调用、检索和 JSON 检查，并加入 CoursePilot 编译、单元/集成测试与离线回归。通过状态看具体提交对应的 [Actions](https://github.com/zengleilei123/vocational-computing-teaching/actions)，不能仅以文件存在宣称功能通过。
 
-## 自动检查
-
-GitHub Actions 会在 push 和 pull request 时运行 Python 编译检查、Python 基础课程测试、两类工具调用实训测试、RAG 检索测试与 JSON 格式验证。最新结果请查看上方状态徽章或 [Actions](https://github.com/zengleilei123/vocational-computing-teaching/actions)。离线测试通过不代表已验证真实模型 API 的兼容性、成本或线上表现。
-
-## 当前状态
-
-项目正在逐步建设。每个模块的成熟度应以实际内容为准；设计初稿、已编写代码、已通过自动测试和已进行真实教学验证是不同状态，不应混为一谈。
+代码测试通过、真实模型 API 验证、容器运行成功和真实课堂有效是四种不同证据。当前新增项目在合成数据上验证；真实 API、容器构建与课堂效果仍需分别验证。
 
 ## 许可与引用
 
-本仓库原创代码许可见 [LICENSE-CODE](LICENSE-CODE)；原创教学文档许可说明见 [LICENSE-DOCS.md](LICENSE-DOCS.md)。引用第三方教材、图片、代码或数据时，应遵守原始许可并标明来源。
-
-## 参与与反馈
-
-欢迎通过 Issues 提出错误报告、教学建议或改进方案。详细规范见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+原创代码许可见 [LICENSE-CODE](LICENSE-CODE)；原创教学文档说明见 [LICENSE-DOCS.md](LICENSE-DOCS.md)。第三方资料遵守原始许可。研究依据见 [课程映射](docs/INTEGRATED-COURSE.md#研究与设计依据2026-10-28-核对)。
