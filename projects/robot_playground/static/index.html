@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>校园机器人挑战场</title><link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script></head>
+<body>
+<header><a class="brand" href="/">ROBOT LAB<span>校园机器人挑战场</span></a><span class="privacy">本机运行 · 不需要 API Key</span></header>
+<main>
+<section class="intro"><div><h1>你的机器人，听你的。</h1><p>先走一遍，再改规则。设计地图、比较路线，或教机器人读懂你画的符号。</p></div><button id="export" class="outline">导出我的实验</button></section>
+<div class="workspace">
+<aside class="missions"><h2>选择挑战</h2><div id="presets" class="preset-list"></div><div class="mission-note"><h3>不只比谁更快</h3><p>先写下预测，再运行验证。说明一个失败原因，比多刷一次分数更重要。</p></div><details><summary>把挑战交给同学</summary><p>导出你的地图，让同学写策略；保持相同地图，再比较算法。不要用通关次数代替学习评价。</p></details></aside>
+<section class="arena"><div class="section-head"><h2 id="map-title">加载挑战…</h2><span id="mode-label">手动探索</span></div><p id="question" class="question"></p>
+<div id="grid" class="grid" aria-label="可编辑地图"></div>
+<div class="legend"><span>S 起点</span><span>G 终点</span><span>■ 墙</span><span>9 高耗能地形</span><span>普通地面消耗 1</span></div>
+<div class="metrics" aria-live="polite"><div><span>步数</span><strong id="steps">0</strong></div><div><span>累计能耗</span><strong id="energy">0</strong></div><div><span>当前状态</span><strong id="state">待出发</strong></div></div>
+<div class="moves" role="group" aria-label="手动控制"><button data-move="up" aria-label="向上移动">↑</button><button data-move="left" aria-label="向左移动">←</button><button data-move="down" aria-label="向下移动">↓</button><button data-move="right" aria-label="向右移动">→</button><button id="reset" class="outline">回到起点</button></div>
+<p class="hint">方向键 / WASD 可移动。画图、编辑文字或聚焦按钮时不会误操作地图。</p>
+<div class="algorithms"><button id="bfs">BFS · 最少步数</button><button id="dijkstra">Dijkstra · 最低能耗</button><button id="student" class="outline">我的直走策略</button></div>
+<div class="replay"><button id="play" class="outline" disabled>播放路线</button><input id="frame" type="range" min="0" max="0" value="0" aria-label="逐步查看路线" disabled><span id="frame-label">0 / 0</span></div>
+<table><caption>同一张地图，策略怎样取舍？</caption><thead><tr><th>策略</th><th>结果</th><th>步数</th><th>能耗</th></tr></thead><tbody id="comparisons"><tr><td colspan="4">运行算法后显示；修改地图会清空对比。</td></tr></tbody></table>
+<details class="editor"><summary>我来当关卡设计师</summary><p>选择画笔后点击格子；也可以修改下面的字符地图。S / G 各一个，# 为墙，2–9 为进入成本。</p><div id="brushes" role="group" aria-label="地图画笔"><button data-brush="play" aria-pressed="true">探索</button><button data-brush=".">地面</button><button data-brush="#">墙</button><button data-brush="9">高耗能</button><button data-brush="S">起点</button><button data-brush="G">终点</button></div><label for="map-text">可复制的关卡源码</label><textarea id="map-text" rows="8" spellcheck="false"></textarea><button id="apply-map">应用地图</button><p class="hint">你可以故意做一个无解关卡，但要能解释为什么无解。原有记录随地图修改清空。</p></details>
+</section>
+<section class="drawing"><h2>教它读懂我的符号</h2><p>在 5×5 画板上画一个符号，自己给它贴标签。它不必像箭头，只要四个方向容易区分。</p><div id="pad" class="pad" aria-label="5乘5手绘画板"></div><div class="pad-tools"><button id="clear-pad" class="outline">清空画板</button><label>标签 <select id="label"><option value="up">上</option><option value="right">右</option><option value="down">下</option><option value="left">左</option></select></label></div><div class="two"><button id="add-train">加入训练集</button><button id="add-test" class="outline">留作测试</button></div><p id="sample-count">训练 0 · 留出测试 0</p><div id="samples" class="sample-list"></div><div class="two"><button id="demo-data" class="outline">载入合成示例</button><button id="clear-data" class="outline">清空样本</button></div><label class="k-label">近邻数 k <select id="k"><option>1</option><option>3</option><option>5</option></select></label><div class="two"><button id="recognize">识别画板</button><button id="evaluate" class="outline">测一测泛化</button></div><p id="prediction" class="prediction" aria-live="polite">先为四个方向各采一个样本。分类只使用训练集，不使用留出测试集。</p><button id="execute" disabled>确认执行这个方向</button><div id="evaluation" class="evaluation" aria-live="polite"></div><details><summary>它真的“学会”了吗？</summary><p>这里是 k-NN：保存样本并比较像素距离，不是大模型，也没有训练神经网络。票数不是概率。先采训练，再独立画测试；不能把同一张图放两边。</p><p>画得不一样、换位、换个人写，可能识别失败。请保留错例，再决定增加什么数据。</p></details></section>
+</div>
+<p id="notice" class="notice" role="status">正在连接本机教学服务…</p>
+<footer>没有公共排行榜，也不会自动写入成绩。导出文件由你自行保存；刷新页面会清空本次样本与实验记录。</footer>
+</main></body></html>

@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: "3.11"
       - name: Compile teaching examples
-        run: python -m compileall -q curriculum
+        run: python -m compileall -q curriculum projects
       - name: Test Python basics unit
         run: python -m unittest discover -s curriculum/python-programming/01-basics -p "test_*.py" -v
       - name: Test deterministic agent lab
@@ -31,3 +31,33 @@ jobs:
         run: python -m unittest discover -s curriculum/ai-agent-development/03-rag -p "test_*.py" -v
       - name: Validate evaluation JSON
         run: python -m json.tool curriculum/ai-agent-development/01-tool-calling/evaluation-cases.json > /dev/null
+      - name: Test CoursePilot integrated project
+        run: python -m unittest discover -s projects/coursepilot -p "test_*.py" -v
+      - name: Evaluate CoursePilot offline regression
+        run: python projects/coursepilot/app.py evaluate
+      - name: Test classroom practice projects offline
+        run: python -m unittest discover -s projects/classroom_practice -p "test_*.py" -v
+      - name: Smoke test classroom command line demos
+        run: |
+          python -m projects.classroom_practice.app booking
+          python -m projects.classroom_practice.app classify
+          python -m projects.classroom_practice.app feedback
+      - name: Test playable robot and glyph projects
+        run: python -m unittest discover -s projects/robot_playground -p "test_*.py" -v
+      - name: Check browser JavaScript syntax
+        run: node --check projects/robot_playground/static/app.js
+
+  browser-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install optional browser test dependencies
+        run: |
+          python -m pip install playwright==1.57.0
+          python -m playwright install --with-deps chromium
+      - name: Test real browser against local HTTP
+        run: python -m projects.robot_playground.tools.browser_smoke

@@ -1,0 +1,12 @@
+diff --git a/teacher_reference/robot_map_portfolio/static/portfolio-core.js b/teacher_reference/robot_map_portfolio/static/portfolio-core.js
+--- a/teacher_reference/robot_map_portfolio/static/portfolio-core.js
++++ b/teacher_reference/robot_map_portfolio/static/portfolio-core.js
+@@ -124,7 +124,7 @@
+     try {
+       storage.setItem(STORAGE_KEY, JSON.stringify(records));
+     } catch (_error) {
+-      throw new PortfolioError('storage-write', '本地存储写入失败，存档未更新。请检查存储权限或剩余空间，并导出地图备份。');
++      // Continue so the caller can display the in-memory records.
+     }
+     // Nothing is reported as saved until setItem has returned successfully.
+     return copyRecords(records);
