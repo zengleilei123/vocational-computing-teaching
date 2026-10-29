@@ -6,6 +6,24 @@
 
 验收学生作品时，使用其实际启动入口和 URL，按同一 A01—A12 契约编写或执行对应检查，并填写[学生交付证据](../../classroom/robot_portfolio/student/SUBMISSION.md)。修改选择器或测试适配层时保留原要求及反例，不要把界面命名差异判为业务功能失败，也不要静默切回教师服务。
 
+已有独立的[学生作品验收入口](../../acceptance/robot_portfolio/README.md)：显式传入 URL 和界面适配，不自动启动教师服务；支持的普通表单／原生列表、人工复核范围及报告含义均在该页说明。以下教师套件继续验证参考实现的扩展约定，例如数组存储格式与 A07 读取前拒绝；学生运行器按 CAPSTONE 的要求检查，不把这些教师内部选择强加给学生。校准运行器时，教师配置还须与 `--allow-reference` 同时使用，报告标为参考对象。
+
+### 校准学生验收运行器
+
+完整仓库提供 `acceptance-adapter.json` 作为教师 UI 的显式适配，学生包不包含该配置。先在一个终端启动参考服务：
+
+```bash
+python -m teacher_reference.robot_map_portfolio.server --port 8766
+```
+
+再在另一个终端的仓库根目录运行；输出目录须是新目录：
+
+```bash
+python -m acceptance.robot_portfolio --url http://127.0.0.1:8766 --adapter teacher_reference/robot_map_portfolio/acceptance-adapter.json --source-root . --output reports/reference-calibration-001 --allow-reference
+```
+
+此报告明确标为 `reference`，只用于验证运行器与参考实现之间的适配。学生作品必须使用自己的配置、URL 和源码资产；不要把校准结果写入学生作品通过记录。原教师专用套件及故障补丁仍按下方命令运行，保持各自验证范围。
+
 ## 环境与执行
 
 在仓库根目录使用 Python 3.10+、Node 20+，安装浏览器测试依赖：

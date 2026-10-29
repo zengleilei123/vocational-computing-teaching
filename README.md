@@ -2,6 +2,7 @@
 
 [![Teaching repository checks](https://github.com/zengleilei123/vocational-computing-teaching/actions/workflows/teaching-checks.yml/badge.svg)](https://github.com/zengleilei123/vocational-computing-teaching/actions/workflows/teaching-checks.yml)
 [![Classroom student kit](https://github.com/zengleilei123/vocational-computing-teaching/actions/workflows/classroom-kit.yml/badge.svg)](https://github.com/zengleilei123/vocational-computing-teaching/actions/workflows/classroom-kit.yml)
+[![Student target acceptance harness](https://github.com/zengleilei123/vocational-computing-teaching/actions/workflows/student-acceptance.yml/badge.svg)](https://github.com/zengleilei123/vocational-computing-teaching/actions/workflows/student-acceptance.yml)
 
 面向高职计算机类专业的课程设计、编程教学、算法训练、软件工程实训与人工智能应用开发资源库。
 
@@ -14,6 +15,7 @@
 | 学生第一次运行 | [学生启动卡](classroom/robot_portfolio/student/START.md) | 选择 Python 命令、环境自检、网页操作和基线测试 |
 | 确定从哪里开始学 | [四项先修诊断](classroom/robot_portfolio/student/DIAGNOSTIC.md) | 读代码、追请求、定位错误和理解测试；对应补学动作 |
 | 完成地图作品集作业 | [五阶段任务卡](classroom/robot_portfolio/student/WORKBOOK.md) · [提交模板](classroom/robot_portfolio/student/SUBMISSION.md) | 小步实现 V1/V2、独立验收、失败修复和个人解释 |
+| 检查自己的地图作品集 | [学生作品验收入口](acceptance/robot_portfolio/README.md) | 显式指定学生 URL 与界面适配，保留 A01—A12 实际结果及未运行项 |
 | 教师发材料、组织首次课 | [课堂发放与组织](classroom/robot_portfolio/README.md) | 不含教师参考答案的学生 ZIP、输入样例、两学时活动和反馈建议 |
 | 教师演示完成版本 | [教师参考实现](teacher_reference/robot_map_portfolio/README.md) | 独立入口、A01—A12 自动验收、可逆故障练习 |
 
@@ -122,7 +124,9 @@ GitHub Actions 保留 Python 基础课、两类工具调用、检索和 JSON 检
 
 课堂学生包工作流在 Ubuntu/Python 3.11 和 Windows/Python 3.10 检查发包与环境诊断，并在实际解压包中启动 HTTP、运行原机器人 37 项测试。通过的作业附带学生 ZIP，日志在失败时也保留；下载前核对对应提交和工作流结果。教师参考另有 A01—A12 浏览器验收与故障补丁检查。
 
-代码测试通过、真实模型 API 验证、容器运行成功和真实课堂有效是四种不同证据。当前项目以合成数据和教学场景验证；真实 API、容器构建与课堂效果仍需分别验证。**教师参考套件固定测试教师服务，不能作为学生作品功能已完成的证明。**学生应记录自己的入口、版本和运行结果，另行完成新增功能的验收。
+[学生作品验收运行器](acceptance/robot_portfolio/README.md)复用 Playwright 与 unittest，针对明确指定的本机学生服务执行 A01—A12，核对声明的 HTTP 资产与本地文件，输出结构化报告、逐项摘要及可取得的失败截图。它支持普通表单、原生选择列表和两种确认方式；其他界面须扩展适配或如实保留人工验收。学生包包含运行器和待填写模板，不含教师适配或答案。子集通过只说明选中检查通过，A07 解析探针的覆盖边界和 A10 焦点视觉仍需人工复核。
+
+代码测试通过、真实模型 API 验证、容器运行成功和真实课堂有效是四种不同证据。当前项目以合成数据和教学场景验证；真实 API、容器构建与课堂效果仍需分别验证。**教师参考套件固定测试教师服务，不能作为学生作品功能已完成的证明。**学生应记录自己的入口、版本和运行结果；自动检查不代替三个独立反例、个人讲解或教师评价。
 
 ## 许可与引用
 

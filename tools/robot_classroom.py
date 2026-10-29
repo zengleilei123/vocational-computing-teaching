@@ -47,6 +47,15 @@ BUNDLE_FILES = ROBOT_FILES + (
     'classroom/robot_portfolio/student/DIAGNOSTIC.md',
     'classroom/robot_portfolio/student/WORKBOOK.md',
     'classroom/robot_portfolio/student/SUBMISSION.md',
+    'classroom/robot_portfolio/student/acceptance-adapter.example.json',
+    'acceptance/__init__.py',
+    'acceptance/robot_portfolio/__init__.py',
+    'acceptance/robot_portfolio/__main__.py',
+    'acceptance/robot_portfolio/runner.py',
+    'acceptance/robot_portfolio/browser.py',
+    'acceptance/robot_portfolio/cases.py',
+    'acceptance/robot_portfolio/README.md',
+    'acceptance/robot_portfolio/SOURCES.md',
     'tools/robot_classroom.py',
     'LICENSE-CODE',
     'LICENSE-DOCS.md',
@@ -277,10 +286,14 @@ python -m unittest discover -s projects/robot_playground -p "test_*.py" -v
 - [先修诊断](classroom/robot_portfolio/student/DIAGNOSTIC.md)
 - [五阶段工作簿](classroom/robot_portfolio/student/WORKBOOK.md)
 - [提交与独立验收记录](classroom/robot_portfolio/student/SUBMISSION.md)
+- [针对自己作品的 A01–A12 自动检查](acceptance/robot_portfolio/README.md)
+- [待填写的界面适配模板](classroom/robot_portfolio/student/acceptance-adapter.example.json)
 - [导入测试输入及预期](fixtures/README.md)
 - [AI 协作工作卡](curriculum/ai-assisted-development/WORK-CARDS.md)
 
 环境诊断和旧测试通过不能证明你新增的作品集功能已完成。
+自动检查需要另装 Playwright 与 Chromium，填写自己的界面适配并指定实际学生服务 URL；
+模板故意保留待填写项，运行器不会代你启动教师答案或实现存档功能。
 本包不含教师参考实现或 Git 历史；Git 回退练习先在自己的副本初始化练习仓库。
 公开仓库中的参考材料仍可公开阅读，文件发放隔离不是保密措施。
 

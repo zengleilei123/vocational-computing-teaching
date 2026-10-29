@@ -50,6 +50,15 @@ COPIED_FILES = ROBOT_FILES + (
     'classroom/robot_portfolio/student/DIAGNOSTIC.md',
     'classroom/robot_portfolio/student/WORKBOOK.md',
     'classroom/robot_portfolio/student/SUBMISSION.md',
+    'classroom/robot_portfolio/student/acceptance-adapter.example.json',
+    'acceptance/__init__.py',
+    'acceptance/robot_portfolio/__init__.py',
+    'acceptance/robot_portfolio/__main__.py',
+    'acceptance/robot_portfolio/runner.py',
+    'acceptance/robot_portfolio/browser.py',
+    'acceptance/robot_portfolio/cases.py',
+    'acceptance/robot_portfolio/README.md',
+    'acceptance/robot_portfolio/SOURCES.md',
     'tools/robot_classroom.py',
     'LICENSE-CODE',
     'LICENSE-DOCS.md',
@@ -468,6 +477,21 @@ class BundleTests(unittest.TestCase):
             "import importlib.util; assert importlib.util.find_spec('teacher_reference') is None",
         ], extracted)
         self.assertEqual(imported.returncode, 0, imported.stderr)
+        help_result = command([
+            sys.executable, '-S', '-m', 'acceptance.robot_portfolio', '--help',
+        ], extracted)
+        self.assertEqual(help_result.returncode, 0, help_result.stderr)
+        self.assertIn('--source-root', help_result.stdout)
+        blocked = command([
+            sys.executable, '-S', '-m', 'acceptance.robot_portfolio',
+            '--url', 'http://127.0.0.1:8765', '--source-root', '.',
+            '--adapter', 'classroom/robot_portfolio/student/acceptance-adapter.example.json',
+            '--output', 'reports/unfilled-template',
+        ], extracted)
+        self.assertEqual(blocked.returncode, 2, blocked.stdout + blocked.stderr)
+        blocked_report = json.loads((extracted / 'reports/unfilled-template/report.json').read_text(encoding='utf-8'))
+        self.assertEqual(blocked_report['tests_run'], 0)
+        self.assertFalse(blocked_report['all_contract_automated_pass'])
         baseline = command([
             sys.executable, '-m', 'unittest', 'discover', '-s', 'projects/robot_playground',
             '-p', 'test_*.py', '-v',

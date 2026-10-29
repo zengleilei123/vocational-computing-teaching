@@ -8,6 +8,7 @@
 | [先修诊断](student/DIAGNOSTIC.md) | 四项独立任务、补练与复查 |
 | [五阶段工作簿](student/WORKBOOK.md) | 从理解起点到完成 V1/V2 |
 | [提交与验收记录](student/SUBMISSION.md) | 记录实际被测作品、独立反例、失败与修复 |
+| [学生作品自动验收](../../acceptance/robot_portfolio/README.md) | 明确学生 URL、界面适配和代码资产；查看 A01—A12 实际执行结果 |
 | [设计来源](SOURCES.md) | 教育部标准、PRIMM、形成性反馈和工具选择的依据 |
 
 ## 课前：先验证实际发出的包
@@ -37,6 +38,7 @@ python -m projects.robot_playground.server --port 8765
 - 包根直接包含 `projects/`、`tools/`、`classroom/` 等目录，没有额外套一层项目文件夹。
 - 清单记录发包文件的字节数、SHA-256 和可取得的 Git 来源。`dirty` 为真表示发包时含未提交变化，不能把记录的提交号当成整个包的提交快照；无法取得来源时保留未知。学生开始修改后，不要求其文件仍与起始哈希相同。
 - `fixtures/` 是后续验收输入，包含合法与损坏文件、名称和字节边界；它不会为原页面增加导入功能。原来的实验导出格式也不等于地图作品集格式。
+- `acceptance/` 提供可选浏览器验收运行器；学生复制并填写 `classroom/robot_portfolio/student/acceptance-adapter.example.json`，对自己的服务运行。模板待填不等于产品失败，也不能把未填写模板记为验收通过。教师适配和验收器自身的测试夹具不进入学生包。
 - 白名单排除教师参考实现、故障解析、Git 历史及未列出的文件；教师本页和来源页也不进入学生包。发包隔离用于防止误发，公开 GitHub 仓库中的答案仍可被访问。
 
 `doctor --port 8765 --json` 可保存结构化诊断。`ready` 只表示本次检查的基础运行条件满足；Node / Playwright 是可选提示，Chromium 的 `not_checked` 不是浏览器验收通过。诊断不安装软件、不联网、不修改配置；需要调整目录或启动方式时使用输出给出的命令。
@@ -90,15 +92,18 @@ python -m projects.robot_playground.server --port 8765
 | 安全与数据边界 | 10 | 地图仅保存约定字段，名称作为文本显示；确认规则及原有保护保留，不混入真实个人资料或密钥 |
 | 工程交付与协作记录 | 10 | 他人按说明复现；有小范围 diff、版本记录、个人贡献及必要的脱敏 AI 使用记录，或明确写未使用 AI |
 
-### 三类检查的对象不能混淆
+### 检查结果应对应实际对象
 
 | 检查 | 它能说明什么 |
 |---|---|
 | `doctor`、包清单、原 37 项测试 | 环境和学生起点是否可用，原测试断言是否满足；不验证学生尚未实现的存档功能 |
 | [教师 A01–A12 套件](../../teacher_reference/robot_map_portfolio/ACCEPTANCE.md) | 它启动并测试教师参考实现，是备课目标和教师实现的回归检查；不是任意学生工程的通用评分器 |
+| [学生作品验收运行器](../../acceptance/robot_portfolio/README.md) | 使用明确的学生 URL、适配和源码资产映射；只声明实际选中并执行的自动检查。它不启动服务器，不返回分数，有限适配和人工复核范围见说明 |
 | 学生作品的人工或自编测试 | 必须针对学生实际代码和实际 URL 执行，按 A01–A12 的行为要求逐项观察，并记录通过／失败／未运行／环境阻塞 |
 
 教师或同学独立选择至少三个反例，记录被测版本、实际地址、输入、操作和结果。学生可以有不同界面与代码结构；不要仅因不匹配教师套件的选择器就判功能失败，也不要用教师服务的结果代替学生服务的结果。
+
+安排自动检查时，先由学生启动自己的服务，再根据实际控件填写适配。保留每次新目录中的 `report.json` 与 `summary.md`，核对目标 URL、配置摘要、所选 A 编号、失败和未运行项。运行器只比对配置中列出的 HTTP 资产，不认证整个后端源码；教师仍需检查实际启动方式、提交或 diff。A07 的自定义解析器／Worker 路径以及 A10 的视觉焦点须按报告人工复核。不能为了获得绿色结果，将学生 URL 换成教师 URL，或把 `--allow-reference` 的校准结果记在学生成绩中。
 
 需要故障定位活动时，直接复用已有[学生故障任务](../../teacher_reference/robot_map_portfolio/exercises/storage-write-failure/STUDENT.md)与[教师解析](../../teacher_reference/robot_map_portfolio/exercises/storage-write-failure/TEACHER.md)，按其说明建立独立练习副本；本学生起始包不附带这些答案。
 
