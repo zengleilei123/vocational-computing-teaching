@@ -1,10 +1,30 @@
 # Vocational Computing Teaching
 
 [![Teaching repository checks](https://github.com/zengleilei123/vocational-computing-teaching/actions/workflows/teaching-checks.yml/badge.svg)](https://github.com/zengleilei123/vocational-computing-teaching/actions/workflows/teaching-checks.yml)
+[![Classroom student kit](https://github.com/zengleilei123/vocational-computing-teaching/actions/workflows/classroom-kit.yml/badge.svg)](https://github.com/zengleilei123/vocational-computing-teaching/actions/workflows/classroom-kit.yml)
 
 面向高职计算机类专业的课程设计、编程教学、算法训练、软件工程实训与人工智能应用开发资源库。
 
 本仓库以“能讲清、能运行、能练习、能评价”为原则，持续沉淀可复用的教学材料与小型工程项目。它不是某所学校的官方课程，也不替代具体院校的人才培养方案。
+
+## 从这里开始
+
+| 你现在要做什么 | 入口 | 可以得到什么 |
+|---|---|---|
+| 学生第一次运行 | [学生启动卡](classroom/robot_portfolio/student/START.md) | 选择 Python 命令、环境自检、网页操作和基线测试 |
+| 确定从哪里开始学 | [四项先修诊断](classroom/robot_portfolio/student/DIAGNOSTIC.md) | 读代码、追请求、定位错误和理解测试；对应补学动作 |
+| 完成地图作品集作业 | [五阶段任务卡](classroom/robot_portfolio/student/WORKBOOK.md) · [提交模板](classroom/robot_portfolio/student/SUBMISSION.md) | 小步实现 V1/V2、独立验收、失败修复和个人解释 |
+| 教师发材料、组织首次课 | [课堂发放与组织](classroom/robot_portfolio/README.md) | 不含教师参考答案的学生 ZIP、输入样例、两学时活动和反馈建议 |
+| 教师演示完成版本 | [教师参考实现](teacher_reference/robot_map_portfolio/README.md) | 独立入口、A01—A12 自动验收、可逆故障练习 |
+
+学生基础运行只需 Python 3.10+ 和浏览器，不需要 Node、API Key 或联网 AI。先在仓库根目录检查环境：
+
+```bash
+python tools/robot_classroom.py doctor --port 8765
+python -m projects.robot_playground.server --port 8765
+```
+
+Windows 可将 `python` 换为 `py -3`，macOS/Linux 可用 `python3`；先确认所选解释器版本。教师可运行 `python tools/robot_classroom.py bundle --output dist/robot-student.zip`，再按[发放说明](classroom/robot_portfolio/README.md)解压检查。ZIP 保留学生起始代码与任务，不含教师参考实现或 Git 历史；公开仓库仍可访问教师材料，分包用于避免误发。
 
 ## 新增课程：AI 辅助应用开发（Vibe Coding 实训）
 
@@ -12,7 +32,7 @@
 
 从现有机器人项目出发，学习需求拆解、代码上下文、AI 辅助实现、diff 审查、调试测试、版本回退和交付。建议的项目强化组合为 12 学时实用算法回顾 + 36 学时开发桥接 + 24 学时 AI 协作，不替代完整专业基础课程。
 
-**本轮新增的是课程设计、工作卡和考核材料，不是地图存档等新功能的实现。**基础作业是让学生将已有地图演示升级为本地作品集；读懂关键逻辑和验证结果是必修，不以聊天次数或付费模型额度评分。[提示与审查卡](curriculum/ai-assisted-development/WORK-CARDS.md) · [考核量规](curriculum/ai-assisted-development/ASSESSMENT.md) · [资料来源](curriculum/ai-assisted-development/SOURCES.md)
+**学生起始工程中的地图存档功能仍待实现；完整 V1/V2 参考答案位于独立的 `teacher_reference/`。**基础作业是让学生将已有地图演示升级为本地作品集；读懂关键逻辑和验证结果是必修，不以聊天次数或付费模型额度评分。[提示与审查卡](curriculum/ai-assisted-development/WORK-CARDS.md) · [考核量规](curriculum/ai-assisted-development/ASSESSMENT.md) · [资料来源](curriculum/ai-assisted-development/SOURCES.md)
 
 ## 新增可玩项目：校园机器人挑战场
 
@@ -100,7 +120,9 @@ AI 实训 01 是确定性脚手架；[实训 02](curriculum/ai-agent-development
 
 GitHub Actions 保留 Python 基础课、两类工具调用、检索和 JSON 检查，并加入 CoursePilot 编译、单元/集成测试与离线回归，以及课堂三项目的业务测试和命令行演示。机器人挑战场增加 Python/HTTP 测试、JavaScript 语法检查及独立 Chromium 浏览器作业。通过状态看具体提交对应的 [Actions](https://github.com/zengleilei123/vocational-computing-teaching/actions)，不能仅以文件存在宣称功能通过。
 
-代码测试通过、真实模型 API 验证、容器运行成功和真实课堂有效是四种不同证据。当前项目以合成数据和教学场景验证；真实 API、容器构建与课堂效果仍需分别验证。AI 辅助开发的新作业需要学生另行实现并补测试；现有 CI 不等于这些作业已经完成。
+课堂学生包工作流在 Ubuntu/Python 3.11 和 Windows/Python 3.10 检查发包与环境诊断，并在实际解压包中启动 HTTP、运行原机器人 37 项测试。通过的作业附带学生 ZIP，日志在失败时也保留；下载前核对对应提交和工作流结果。教师参考另有 A01—A12 浏览器验收与故障补丁检查。
+
+代码测试通过、真实模型 API 验证、容器运行成功和真实课堂有效是四种不同证据。当前项目以合成数据和教学场景验证；真实 API、容器构建与课堂效果仍需分别验证。**教师参考套件固定测试教师服务，不能作为学生作品功能已完成的证明。**学生应记录自己的入口、版本和运行结果，另行完成新增功能的验收。
 
 ## 许可与引用
 

@@ -2,6 +2,8 @@
 
 > 6 × 4 学时 = 24 学时，每学时 45 分钟。学生应有 [先修基础](README.md)。这是授课设计，尚未开展真实课堂试教。完整作业约束见 [任务书](CAPSTONE.md)。
 
+教师首次授课可使用[两学时启动活动](../../classroom/robot_portfolio/README.md)，作为单元 1 的前两学时，不额外增加总课时。学生全程填写[任务卡](../../classroom/robot_portfolio/student/WORKBOOK.md)与[提交模板](../../classroom/robot_portfolio/student/SUBMISSION.md)；先修不足时按[诊断题](../../classroom/robot_portfolio/student/DIAGNOSTIC.md)补学。
+
 ## 单元 1：先让想法可见，再定义完成（4 学时）
 
 开场让学生用 AI 改一个低风险界面细节，如地图名称说明或帮助文本；目标是尽快看到变化，不以生成速度计分。随后教师提出一个反例：刷新页面之后，地图为什么丢了？

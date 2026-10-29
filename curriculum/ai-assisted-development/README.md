@@ -1,6 +1,6 @@
 # AI 辅助应用开发：Vibe Coding 项目实训
 
-> 状态：课程设计与学生任务书，尚未真实试教。本次只增加教学文档，不把下述作业功能写成已经实现的产品能力。面向高职计算机类专业；不绑定某地区、学校或商业工具。
+> 状态：课程设计、学生任务书与课堂材料，尚未真实试教。学生起始工程中的地图存档仍待实现；教师 V1/V2 参考、独立验收与故障练习使用单独入口。面向高职计算机类专业；不绑定某地区、学校或商业工具。
 
 ## 课程定位
 
@@ -19,6 +19,12 @@
 - [考核与教师组织](ASSESSMENT.md)：评价理解和证据，而非聊天次数。
 - [官方资料与边界](SOURCES.md)：2026-10-28 核对。
 
+## 直接开始上课
+
+学生按[首次启动](../../classroom/robot_portfolio/student/START.md) → [四项先修诊断](../../classroom/robot_portfolio/student/DIAGNOSTIC.md) → [五阶段任务卡](../../classroom/robot_portfolio/student/WORKBOOK.md) → [交付模板](../../classroom/robot_portfolio/student/SUBMISSION.md)推进。教师使用[发包与首次两学时组织说明](../../classroom/robot_portfolio/README.md)，可生成不含参考答案的学生 ZIP。
+
+[教师参考实现](../../teacher_reference/robot_map_portfolio/README.md)用于备课与教师演示。它的自动测试固定启动教师服务；学生必须对自己的代码和入口保留独立验收证据，不能直接提交参考套件的绿灯。
+
 ## 先修诊断
 
 学生在不请求 AI 直接给答案的情况下，应能够：
@@ -28,7 +34,7 @@
 3. 根据 README 启动已有项目，找到一次错误的文件与行号。
 4. 运行一条测试命令，理解通过、失败、没有发现测试的区别。
 
-未达到的学生先完成 Python 基础和开发桥接单元；仍可参加教师组织的 AI 体验活动，但不能把体验当作独立开发能力。
+四条要求对应[四个可操作的小任务及补学动作](../../classroom/robot_portfolio/student/DIAGNOSTIC.md)。未达到的学生先补对应知识并重做，再进入主任务；仍可参加教师组织的 AI 体验活动，但不能把体验当作独立开发能力。
 
 ## 24 学时课程大纲
 
