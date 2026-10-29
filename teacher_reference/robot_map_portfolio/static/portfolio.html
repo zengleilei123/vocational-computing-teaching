@@ -1,0 +1,26 @@
+<section class="portfolio" aria-labelledby="portfolio-heading">
+  <div class="portfolio-heading"><h2 id="portfolio-heading">我的地图作品集</h2><span class="teacher-badge">教师参考 · V1 / V2</span></div>
+  <p id="portfolio-help">地图只保存在当前浏览器与服务地址中；换设备请手动导出、导入 JSON，不会自动云同步。样本、预测与实验成绩不随地图存档。</p>
+  <form id="portfolio-form" novalidate>
+    <fieldset id="portfolio-controls">
+      <legend class="visually-hidden">地图存档与作品交换</legend>
+      <div class="portfolio-row">
+        <div class="portfolio-field"><label for="portfolio-name">地图名称</label><textarea id="portfolio-name" rows="2" autocomplete="off" spellcheck="false" aria-describedby="portfolio-name-help"></textarea><small id="portfolio-name-help">去除首尾空白后 1–40 个 Unicode 码点；表情字符也可使用。</small></div>
+        <button id="portfolio-save" type="submit">保存地图</button>
+        <button id="portfolio-export" type="button" class="outline">导出地图 JSON</button>
+      </div>
+      <div class="portfolio-row">
+        <div class="portfolio-field"><label for="portfolio-list">已保存的地图</label><select id="portfolio-list"><option value="">请选择地图</option></select></div>
+        <button id="portfolio-load" type="button" disabled>加载地图</button>
+        <button id="portfolio-delete" type="button" class="outline" disabled>删除地图</button>
+        <div class="portfolio-file"><label for="portfolio-import">导入地图 JSON</label><input id="portfolio-import" type="file" accept=".json,application/json" aria-describedby="portfolio-file-help"><small id="portfolio-file-help">UTF-8 · 最大 16 KiB · 成功后存档并加载</small></div>
+      </div>
+    </fieldset>
+  </form>
+  <p id="portfolio-status" role="status" aria-live="polite" aria-atomic="true">正在读取本地地图存档…</p>
+</section>
+<dialog id="portfolio-confirm" aria-labelledby="portfolio-confirm-heading" aria-describedby="portfolio-confirm-text">
+  <h2 id="portfolio-confirm-heading">请确认地图操作</h2>
+  <p id="portfolio-confirm-text"></p>
+  <div class="portfolio-dialog-actions"><button id="portfolio-confirm-no" type="button" class="outline" autofocus>取消</button><button id="portfolio-confirm-yes" type="button">确认</button></div>
+</dialog>

@@ -1,0 +1,64 @@
+name: Teacher map portfolio acceptance
+
+on:
+  pull_request:
+    branches: [main, feat/coursepilot-integrated-learning]
+    paths:
+      - 'teacher_reference/**'
+      - 'projects/robot_playground/**'
+      - 'curriculum/ai-assisted-development/**'
+      - '.github/workflows/teacher-map-portfolio.yml'
+  push:
+    branches: [main, feat/coursepilot-integrated-learning, feat/teacher-map-portfolio]
+    paths:
+      - 'teacher_reference/**'
+      - 'projects/robot_playground/**'
+      - 'curriculum/ai-assisted-development/**'
+      - '.github/workflows/teacher-map-portfolio.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts-and-isolation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Compile reference and check JavaScript syntax
+        run: |
+          python -m compileall -q teacher_reference
+          node --check teacher_reference/robot_map_portfolio/static/portfolio-core.js
+          node --check teacher_reference/robot_map_portfolio/static/portfolio-ui.js
+      - name: Check map document and storage contracts
+        run: node --test teacher_reference/robot_map_portfolio/tests/core.test.cjs
+      - name: Check teacher routes and unchanged student service
+        run: python -m unittest teacher_reference.robot_map_portfolio.tests.test_server -v
+      - name: Check original robot domain and HTTP regression
+        run: python -m unittest discover -s projects/robot_playground -p 'test_*.py' -v
+      - name: Prove the deliberate fault is detected and reversible
+        run: python -m teacher_reference.robot_map_portfolio.tools.check_fault
+
+  independent-browser-acceptance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install existing browser test dependencies
+        run: |
+          python -m pip install playwright==1.57.0
+          python -m playwright install --with-deps chromium
+      - name: Execute all twelve independent acceptance scenarios on real HTTP
+        run: python -m unittest teacher_reference.robot_map_portfolio.tests.test_acceptance -v
+      - name: Preserve original browser regression
+        run: python -m projects.robot_playground.tools.browser_smoke

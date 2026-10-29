@@ -1,0 +1,23 @@
+.portfolio{padding:20px 22px;margin-bottom:24px;border:1px solid var(--line);border-radius:12px;background:var(--paper);min-width:0}
+.portfolio-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.portfolio-heading h2{margin:0}
+.teacher-badge{color:var(--accent);background:var(--soft);border-radius:5px;padding:3px 9px;font-size:12px}
+#portfolio-help{color:var(--muted);font-size:13px;margin:10px 0 16px}
+#portfolio-controls{margin:0;padding:0;border:0;min-width:0}
+.portfolio-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:14px 0}
+.portfolio-field{flex:1 1 250px;min-width:0}
+.portfolio label{display:block;font-weight:600;font-size:13px;margin-bottom:5px}
+.portfolio textarea,.portfolio select{display:block;width:100%;min-width:0;min-height:40px;border:1px solid #aabac3;border-radius:5px;padding:7px 10px;background:white;color:var(--ink)}
+.portfolio textarea{margin:0;font:inherit;letter-spacing:normal;line-height:1.4;resize:vertical}
+.portfolio small{display:block;margin-top:4px;color:var(--muted);font-size:11px}
+.portfolio-file{flex:1 1 250px;min-width:0}
+.portfolio-file input{max-width:100%;width:100%;font-size:12px}
+.portfolio input:focus-visible,.portfolio textarea:focus-visible,.portfolio select:focus-visible,.portfolio button:focus-visible,#portfolio-confirm button:focus-visible{outline:3px solid #c46b14;outline-offset:3px}
+#portfolio-status{margin:12px 0 0;padding:9px 12px;border-radius:5px;background:var(--soft);color:#18584e;overflow-wrap:anywhere;font-size:13px}
+#portfolio-status.error{background:#fff0eb;color:#8d3027}
+#portfolio-confirm{width:min(460px,calc(100vw - 36px));border:1px solid var(--line);border-radius:12px;padding:24px;color:var(--ink)}
+#portfolio-confirm::backdrop{background:#172b3d80}
+#portfolio-confirm-text{white-space:pre-wrap;overflow-wrap:anywhere}
+.portfolio-dialog-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:24px}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-width:720px){.portfolio{padding:16px}.portfolio-row{gap:10px}.portfolio-field,.portfolio-file{flex-basis:100%}.portfolio-row>button{flex:1}.portfolio-heading{align-items:flex-start}}
