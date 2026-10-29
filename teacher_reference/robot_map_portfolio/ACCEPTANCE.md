@@ -2,6 +2,10 @@
 
 本文件将 [CAPSTONE.md](../../curriculum/ai-assisted-development/CAPSTONE.md) 的编号映射到可重复执行的测试。请保留编号，便于把失败记录、修复 diff 和 [ASSESSMENT.md](../../curriculum/ai-assisted-development/ASSESSMENT.md) 的评分证据关联起来。测试面向行为结果，不以“出现了某行源码”或“函数被调用过”作为通过依据。
 
+**验收对象是教师参考实现。** 下列命令固定启动 `teacher_reference.robot_map_portfolio.server`，并使用教师页面的控件及存储约定；它不是能自动检测任意学生工程的通用评分器。即使学生尚未实现任何存档功能，教师套件也可以通过。这里的“独立”指测试输入、预期与断言独立于被测校验器，不代表自动选中了学生代码。
+
+验收学生作品时，使用其实际启动入口和 URL，按同一 A01—A12 契约编写或执行对应检查，并填写[学生交付证据](../../classroom/robot_portfolio/student/SUBMISSION.md)。修改选择器或测试适配层时保留原要求及反例，不要把界面命名差异判为业务功能失败，也不要静默切回教师服务。
+
 ## 环境与执行
 
 在仓库根目录使用 Python 3.10+、Node 20+，安装浏览器测试依赖：

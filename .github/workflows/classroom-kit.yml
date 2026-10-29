@@ -1,0 +1,98 @@
+name: Classroom student kit
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'tools/robot_classroom.py'
+      - 'tools/test_robot_classroom.py'
+      - 'classroom/robot_portfolio/**'
+      - 'projects/robot_playground/**'
+      - 'curriculum/ai-assisted-development/**'
+      - 'LICENSE-CODE'
+      - 'LICENSE-DOCS.md'
+      - '.gitignore'
+      - '.github/workflows/classroom-kit.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'tools/robot_classroom.py'
+      - 'tools/test_robot_classroom.py'
+      - 'classroom/robot_portfolio/**'
+      - 'projects/robot_playground/**'
+      - 'curriculum/ai-assisted-development/**'
+      - 'LICENSE-CODE'
+      - 'LICENSE-DOCS.md'
+      - '.gitignore'
+      - '.github/workflows/classroom-kit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  student-package:
+    name: Student package (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            python: '3.11'
+          - os: windows-latest
+            python: '3.10'
+    env:
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Test diagnostics, isolation, and the unpacked student application
+        shell: python
+        run: |
+          import pathlib
+          import subprocess
+          import sys
+          reports = pathlib.Path('reports')
+          reports.mkdir(exist_ok=True)
+          result = subprocess.run(
+              [sys.executable, '-m', 'unittest', 'discover', '-s', 'tools', '-p', 'test_*.py', '-v'],
+              stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding='utf-8', errors='replace')
+          (reports / 'classroom-tests.txt').write_text(result.stdout, encoding='utf-8')
+          print(result.stdout)
+          raise SystemExit(result.returncode)
+      - name: Generate the student distribution
+        run: python tools/robot_classroom.py bundle --output dist/robot-student.zip
+      - name: Extract the generated distribution
+        run: python -m zipfile -e dist/robot-student.zip dist/student
+      - name: Check the actual extracted environment
+        shell: python
+        run: |
+          import pathlib
+          import subprocess
+          import sys
+          result = subprocess.run(
+              [sys.executable, 'tools/robot_classroom.py', 'doctor', '--port', '18765', '--json'],
+              cwd='dist/student', stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+              encoding='utf-8', errors='replace')
+          pathlib.Path('reports/doctor.json').write_text(result.stdout, encoding='utf-8')
+          print(result.stdout)
+          raise SystemExit(result.returncode)
+      - name: Keep verification evidence even when a check fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: classroom-evidence-${{ matrix.os }}-py${{ matrix.python }}
+          path: reports/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Publish the verified student package
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-student-${{ matrix.os }}-py${{ matrix.python }}
+          path: dist/robot-student.zip
+          if-no-files-found: error
+          retention-days: 14
