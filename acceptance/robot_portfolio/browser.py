@@ -236,7 +236,9 @@ class App:
         return locator(self.page, self.config['selectors'][name])
 
     def open(self):
-        response = self.page.goto(self.url, wait_until='load')
+        # Optional images/frames can outlive a usable application. Wait for
+        # parsed scripts, then establish readiness through the required UI.
+        response = self.page.goto(self.url, wait_until='domcontentloaded')
         assert response is not None and response.ok, 'The explicit target did not return an OK document.'
         self.ready()
 
@@ -257,7 +259,7 @@ class App:
         self.context.close()
 
     def reload(self):
-        self.page.reload(wait_until='load')
+        self.page.reload(wait_until='domcontentloaded')
         self.ready()
 
     def raw_storage(self):

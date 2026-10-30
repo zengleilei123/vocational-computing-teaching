@@ -82,11 +82,9 @@ node --check projects/robot_playground/static/app.js
 node --test teacher_reference/robot_map_portfolio/tests/core.test.cjs
 ```
 
-浏览器验收需要 Node 20+（核心测试）、Python 3.10+，以及固定的 Python Playwright 版本与 Chromium：
+完整教师测试需要 Python 3.10+、Node 20+（核心及故障工具测试）、Git（故障工具回归），以及 Python Playwright 1.57.0 与 Chromium。按[虚拟环境安装步骤](../../acceptance/robot_portfolio/README.md#1-准备环境与自己的服务)准备浏览器依赖，再用该环境中的 Python 执行：
 
 ```bash
-python -m pip install "playwright==1.57.0"
-python -m playwright install chromium
 python -m unittest discover -s teacher_reference/robot_map_portfolio/tests -p "test_*.py" -v
 ```
 
@@ -99,6 +97,8 @@ python -m unittest teacher_reference.robot_map_portfolio.tests.test_acceptance -
 ```
 
 完整的 A01–A12 映射、各项命令、人工检查与证据要求见 [ACCEPTANCE.md](ACCEPTANCE.md)。原项目的离线 DOM 模式不等于这里的真实 HTTP 浏览器验收，本套验收不靠它替代浏览器导航。
+
+完整测试还包括 2 项存储访问拒绝与恢复的浏览器回归，以及 2 项中文故障报告的输出回归；它们是教师实现与工具的额外检查，不增加学生任务书的 A 编号。
 
 ## 故障练习与材料索引
 

@@ -29,6 +29,8 @@ python teacher_reference/robot_map_portfolio/tools/check_fault.py
 python teacher_reference/robot_map_portfolio/tools/check_fault.py --verbose
 ```
 
+脚本将 stdout/stderr 统一为 UTF-8，避免重定向保存中文报告时因系统默认编码而中断。若查看工具按其他编码打开日志，请选择 UTF-8。这里验证的是完整“基线—指定故障—恢复”三阶段，单独出现 `UnicodeEncodeError` 不是业务故障被正确发现的证据。[Python 标准流说明](https://docs.python.org/3.10/library/sys.html#sys.stdout)与[输出流重新配置 API](https://docs.python.org/3.10/library/io.html#io.TextIOWrapper.reconfigure)说明了相关编码条件与接口。
+
 也可以将独立的真实 HTTP 浏览器 A09 纳入同一临时副本验证；这需要 README 规定的浏览器测试依赖：
 
 ```bash

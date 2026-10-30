@@ -218,6 +218,13 @@ def verify(node: str, git: str, verbose: bool, browser: bool) -> None:
 
 
 def main() -> int:
+    # Evidence is often redirected to a file on classroom Windows machines.
+    # Keep Chinese diagnostics printable even when the inherited pipe encoding
+    # cannot represent them; an encoding failure must not interrupt the cycle.
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if callable(reconfigure):
+            reconfigure(encoding="utf-8", errors="backslashreplace")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--verbose", action="store_true", help="显示三次运行的完整 TAP 报告")
     parser.add_argument("--browser", action="store_true",

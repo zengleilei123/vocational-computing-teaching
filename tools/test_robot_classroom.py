@@ -64,7 +64,7 @@ COPIED_FILES = ROBOT_FILES + (
     'LICENSE-DOCS.md',
 )
 FIXTURE_NAMES = (
-    'valid-map.json', 'invalid-json.json', 'unknown-version.json',
+    'valid-map.json', 'invalid-json.json', 'invalid-utf8.json', 'unknown-version.json',
     'missing-goal.json', 'duplicate-start.json', 'unequal-rows.json',
     'html-name.json', 'unicode-name-40.json', 'boundary-16384.json',
     'oversize-16385.json', 'README.md',
@@ -303,6 +303,13 @@ class BundleTests(unittest.TestCase):
             })
             with self.assertRaises(json.JSONDecodeError):
                 fixture('invalid-json.json')
+            invalid_utf8 = archive.read('fixtures/invalid-utf8.json')
+            with self.assertRaises(UnicodeDecodeError):
+                invalid_utf8.decode('utf-8', errors='strict')
+            # The intended defect is encoding, not malformed JSON or geometry.
+            self.assertEqual(json.loads(invalid_utf8.decode('utf-8', errors='replace')), {
+                'version': 1, 'name': 'invalid-\ufffd', 'grid': ['S..', '.#.', '..G'],
+            })
             self.assertEqual(fixture('unknown-version.json')['version'], 2)
             self.assertNotIn('G', ''.join(fixture('missing-goal.json')['grid']))
             self.assertEqual(''.join(fixture('duplicate-start.json')['grid']).count('S'), 2)

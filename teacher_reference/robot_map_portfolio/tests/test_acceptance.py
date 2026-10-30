@@ -307,6 +307,7 @@ class PortfolioAcceptanceTests(unittest.TestCase):
         self.page.locator('#demo-data').click()
         before = self._snapshot()
         cases = {
+            'invalid UTF-8': b'{"version":1,"name":"bad-\xff","grid":["S..",".#.","..G"]}',
             'invalid JSON': b'{not json',
             'unknown version': {**document(), 'version': 2},
             'boolean version': {**document(), 'version': True},
@@ -317,13 +318,30 @@ class PortfolioAcceptanceTests(unittest.TestCase):
             'missing field': {'version': 1, 'name': '缺少地图'},
             'extra field': {**document(), 'train': []},
             'wrong name type': {**document(), 'name': 123},
+            'blank imported name': {**document(), 'name': ' \t\n '},
+            '41 imported code points': {**document(), 'name': '🧭' * 41},
             'wrong grid type': {**document(), 'grid': 'S..\n.#.\n..G'},
         }
         for label, payload in cases.items():
             with self.subTest(case=label):
+                # Every rejected file needs its own fresh, readable feedback;
+                # a previous error must not hide a silently ignored next file.
+                self.page.locator('#portfolio-status').evaluate('''element => {
+                    element.textContent = '';
+                    element.classList.remove('error');
+                }''')
                 self._upload(payload)
                 self._expect_error()
                 self.assertEqual(self._snapshot(), before)
+
+        # A validly encoded U+FFFD is legal name data, not proof of bad bytes.
+        valid = document('合法替换字符\ufffd', MAP_B)
+        self._upload(valid)
+        self._wait_record(valid['name'])
+        self._reload()
+        self._load(valid['name'], MAP_B)
+        with tempfile.TemporaryDirectory(prefix='robot-utf8-roundtrip-') as directory:
+            self.assertEqual(self._download_map(Path(directory) / 'map.json'), valid)
 
     def test_A06_grid_contract_and_boundaries(self):
         self._save('原有地图', MAP_A)

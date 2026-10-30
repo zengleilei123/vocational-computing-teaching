@@ -1,6 +1,6 @@
 # 学生作品验收：来源与实现边界
 
-**最后核对：2026-10-29。** 以下为工具选择和验收设计依据，不代表已经取得学生学习效果。运行器沿用仓库现有 Python `unittest` 与 Playwright 1.57.0；官方网页会更新，实际使用的 API 与浏览器兼容性仍需在固定依赖上验证。
+**最后核对：2026-10-30。** 以下为工具选择和验收设计依据，不代表已经取得学生学习效果。运行器沿用仓库现有 Python `unittest` 与 Playwright 1.57.0；官方网页会更新，实际使用的 API 与浏览器兼容性仍需在固定依赖上验证。
 
 ## S1：隔离每个测试的浏览器状态
 
@@ -28,11 +28,11 @@
 
 ## S4：用页面断言判断就绪
 
-[Playwright Python：Page.goto](https://playwright.dev/python/docs/api/class-page#page-goto)
+[Playwright Python：Page.goto](https://playwright.dev/python/docs/api/class-page#page-goto)；[Navigations](https://playwright.dev/python/docs/navigations)
 
-核对位置：`wait_until`。官方不建议以 `networkidle` 作为测试就绪依据，而应使用页面断言判断所需状态。
+核对位置：`wait_until`、`Basic navigation` 与 `When is the page loaded?`。`load` 还会等待图片、iframe 等依赖资源；应用在它之前或之后都可能尚需不同的就绪判断。官方不建议以 `networkidle` 作为测试就绪依据，而应使用页面断言判断所需状态。
 
-**采用方式：** 导航后等待所需控件和反馈，观察动作完成后的实际状态；不把“暂时没有网络请求”等同于地图已保存，也不通过固定长睡眠让测试碰运气。可配置超时用于适应机器速度，不能替代功能完成证据。
+**采用方式：** 首次导航与刷新等待 `domcontentloaded`，再检查实际 URL、所需控件和地图；动作完成仍由具体状态断言确认。用一张故意挂起的同源图片检验必要控件可用时不必等待整页 `load`。不把“暂时没有网络请求”等同于地图已保存，也不通过固定长睡眠让测试碰运气。可配置超时用于适应机器速度，不能替代功能完成证据。
 
 ## S5：分别检查执行数量、失败与跳过
 
@@ -41,6 +41,22 @@
 核对位置：`TestSuite.countTestCases`、`TestResult` 的 `testsRun`、`errors`、`failures`、`skipped` 和 `wasSuccessful`。这些字段分别描述计划执行的测试、实际执行与结果，不能只凭一个总状态代替覆盖核对。
 
 **采用方式：** 报告保留全体 A 编号与本次所选范围，检查预期集合、实际数量、错误、失败和跳过；子集通过不代表全套通过。不同 Python 版本的空测试 CLI 提示和退出行为可能不同，本工具直接核对覆盖条件，不依赖“零测试会怎样退出”的假设。
+
+## S6：严格 UTF-8 与替换字符不是同一个条件
+
+[WHATWG Encoding Standard：TextDecoder](https://encoding.spec.whatwg.org/#interface-textdecoder)
+
+核对位置：`TextDecoderOptions`、`decode` 和解码错误处理。`fatal` 默认值为 false；替换模式可用 U+FFFD 表示解码错误，严格模式在坏字节时抛错。因此，解码后的文本能通过 JSON 解析，不能证明原始字节满足 UTF-8 契约。
+
+**采用方式：** A05 增加只破坏名称字节编码的导入反例，其他字段和地图均合法；另以合法 UTF-8 编码的 U+FFFD 名称作正对照。测试约束的是文件行为，不规定学生必须使用哪个解码 API。课堂 ZIP 保留原始坏字节，避免通过编辑器重新保存而改变反例。
+
+## S7：将可选浏览器依赖安装到虚拟环境
+
+[Python：venv](https://docs.python.org/3/library/venv.html)；[Python Packaging：Externally Managed Environments](https://packaging.python.org/en/latest/specifications/externally-managed-environments/)
+
+核对位置：虚拟环境的独立包目录、直接调用环境解释器，以及由外部包管理器维护的系统 Python 的安装限制。
+
+**采用方式：** Windows 与 macOS/Linux 分别给出 `.venv` 内解释器的完整调用方式，安装和运行使用同一解释器，不依赖激活脚本或修改 PowerShell 执行策略。基础课堂程序仍使用标准库；虚拟环境仅隔离可选验收依赖，不改变作品功能或评分。
 
 ## 本仓库自己的选择
 

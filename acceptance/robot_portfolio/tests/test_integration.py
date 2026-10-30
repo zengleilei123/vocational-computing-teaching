@@ -185,6 +185,52 @@ class BrowserHarnessControls(unittest.TestCase):
             result, report = self.run_target('reference-all', url, reference_config())
         self.assert_full_pass(result, report)
 
+    def test_ready_controls_do_not_wait_for_optional_image_load(self):
+        """Open/reload observe usable controls while an optional resource waits."""
+        from playwright.sync_api import sync_playwright
+        from acceptance.robot_portfolio.browser import App
+
+        with fixture('fault') as (root, url, config):
+            index = root / 'index.html'
+            html = index.read_text(encoding='utf-8')
+            self.assertEqual(html.count('</body>'), 1)
+            index.write_text(html.replace('</body>',
+                '<img id="calibration-delayed-image" src="/calibration-delayed.png" '
+                'alt="" width="1" height="1"></body>'), encoding='utf-8', newline='\n')
+            with sync_playwright() as playwright:
+                launch = {'headless': True}
+                if os.environ.get('PLAYWRIGHT_CHROMIUM_EXECUTABLE'):
+                    launch['executable_path'] = os.environ['PLAYWRIGHT_CHROMIUM_EXECUTABLE']
+                browser = playwright.chromium.launch(**launch)
+                pending = []
+                app = None
+                try:
+                    app = App(browser, config, url)
+                    # Deliberately leave this same-origin image unresolved. No
+                    # sleep or longer timeout substitutes for business readiness.
+                    app.context.route('**/calibration-delayed.png', lambda route: pending.append(route))
+                    for action in ('open', 'reload'):
+                        getattr(app, action)()
+                        self.assertTrue(pending, f'{action}: the controlled image request did not start.')
+                        self.assertFalse(app.page.locator('#calibration-delayed-image').evaluate('(e) => e.complete'))
+                        self.assertEqual(app.page.evaluate('document.readyState'), 'interactive')
+                        self.assertEqual(app.errors, [])
+                        self.assertEqual(app.blocked_requests, [])
+                        # Finish every held route before reload/context cleanup;
+                        # otherwise Playwright cancels its outstanding callbacks.
+                        while pending:
+                            pending.pop().abort()
+                        app.page.wait_for_load_state('load')
+                finally:
+                    if app is not None:
+                        try:
+                            while pending:
+                                pending.pop().abort()
+                            app.page.wait_for_load_state('load')
+                        finally:
+                            app.close()
+                    browser.close()
+
     def test_changed_ids_object_storage_and_private_js_scope_still_pass(self):
         with fixture('object-and-private-state') as (root, url, config):
             result, report = self.run_target('variant-object-private', url, config, root)
@@ -257,6 +303,55 @@ class BrowserHarnessControls(unittest.TestCase):
             missing, missing_report = self.run_target('missing-page', url + 'missing-page', reference_config())
             self.assertEqual(missing.returncode, 2, missing.stdout + missing.stderr)
             self.assertEqual(missing_report['tests_run'], 0)
+
+    def test_exchange_input_mutations_fail_and_restoration_passes(self):
+        """Reject bad bytes/name truncation without rejecting a legal U+FFFD."""
+        with fixture('fault') as (root, url, config):
+            core = root / 'core.js'
+            original = core.read_text(encoding='utf-8')
+            self.assertEqual(original.count('{ fatal: true }'), 1)
+            self.assertEqual(original.count('    return validateDocument(input);'), 1)
+            self.assertEqual(original.count('    const name = input.trim();'), 1)
+            mutations = {
+                'permissive-utf8': (
+                    original.replace('{ fatal: true }', '{ fatal: false }'),
+                    'AssertionError'),
+                'truncate-imported-name': (
+                    original.replace('    return validateDocument(input);',
+                        "    if (input && typeof input.name === 'string' && "
+                        "Array.from(input.name.trim()).length > 40) {\n"
+                        "      input.name = Array.from(input.name.trim()).slice(0, 40).join('');\n"
+                        "    }\n    return validateDocument(input);"),
+                    'AssertionError'),
+                'reject-valid-replacement': (
+                    original.replace('    const name = input.trim();',
+                        "    if (input.includes('\\uFFFD')) throw invalidDocument('fixture rejects legal U+FFFD');\n"
+                        '    const name = input.trim();'),
+                    'TimeoutError'),
+            }
+            try:
+                for label, (mutated, expected_error) in mutations.items():
+                    with self.subTest(mutation=label):
+                        self.assertNotEqual(mutated, original)
+                        core.write_text(mutated, encoding='utf-8', newline='\n')
+                        failed, report = self.run_target(label, url, config, root, cases='A05')
+                        self.assertEqual(failed.returncode, 1, failed.stdout + failed.stderr)
+                        self.assertEqual(report['tests_run'], 1)
+                        self.assertEqual(report['blockers'], [])
+                        self.assertEqual(report['cases']['A05']['status'], 'failed')
+                        self.assertTrue(any(expected_error in error
+                            for error in report['cases']['A05']['errors']), report['cases']['A05']['errors'])
+                        self.assertFalse(report['selected_automated_pass'])
+                        self.assertFalse(report['all_contract_automated_pass'])
+                        self.assertTrue(all(item['matches'] for item in report['target']['assets']))
+            finally:
+                core.write_text(original, encoding='utf-8', newline='\n')
+            restored, report = self.run_target('restored-exchange-input', url, config, root, cases='A05')
+            self.assertEqual(restored.returncode, 0, restored.stdout + restored.stderr)
+            self.assertEqual(report['tests_run'], 1)
+            self.assertTrue(report['selected_automated_pass'])
+            self.assertFalse(report['all_contract_automated_pass'])
+            self.assertEqual(report['cases']['A01']['status'], 'not_run')
 
     def test_existing_fault_patch_is_detected_and_reversal_passes(self):
         git = shutil.which('git')

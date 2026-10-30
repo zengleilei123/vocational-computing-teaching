@@ -26,11 +26,9 @@ python -m acceptance.robot_portfolio --url http://127.0.0.1:8766 --adapter teach
 
 ## 环境与执行
 
-在仓库根目录使用 Python 3.10+、Node 20+，安装浏览器测试依赖：
+在仓库根目录使用 Python 3.10+、Node 20+ 和 Git。按[虚拟环境安装步骤](../../acceptance/robot_portfolio/README.md#1-准备环境与自己的服务)准备 Playwright 1.57.0 与 Chromium，随后用同一个环境中的 Python 执行：
 
 ```bash
-python -m pip install "playwright==1.57.0"
-python -m playwright install chromium
 node --test teacher_reference/robot_map_portfolio/tests/core.test.cjs
 python -m unittest discover -s teacher_reference/robot_map_portfolio/tests -p "test_*.py" -v
 python -m unittest discover -s projects/robot_playground -p "test_*.py" -v
@@ -50,11 +48,11 @@ python -m unittest discover -s projects/robot_playground -p "test_*.py" -v
 | A02 | 空白名、41 码点名、40 码点名、含辅助平面字符的名称 | 无效名称拒绝；有效边界接受；按 Unicode 码点计数；拒绝时当前地图、列表及原始存储不变 | 页面错误、核心边界断言、存储快照 |
 | A03 | 同名再次保存 / 导入，取消，再明确确认覆盖 | 无静默覆盖；取消保持所有状态；确认只替换对应地图，不影响其他存档 | 确认选择、两条记录前后对照 |
 | A04 | 删除已有地图，先取消再确认 | 取消后记录仍在；只有明确确认后删除目标项 | 可见列表和原始存储 |
-| A05 | 非法 JSON、数组、`null`、缺 / 多字段、未知或错误类型的版本 | 可读错误；拒绝非法顶层和版本；无半条存档，不破坏当前状态或原始存储 | 文件导入、错误信息、前后快照 |
+| A05 | 非法 UTF-8、JSON、导入名称、数组、`null`、缺 / 多字段、未知或错误类型的版本；合法 U+FFFD 名称 | 坏输入拒绝且不破坏原状态；合法 UTF-8 的替换字符可保存、刷新加载及导出 | 原始文件字节、错误信息、前后快照及真实下载 |
 | A06 | 缺 S/G、重复 S/G、不等宽、2 / 21 行或列、非法字符；3 / 20 的合法边界 | 与 `engine.parse_grid` 一致地接受或拒绝；失败不改变当前地图和存档 | 核心校验、真实页面、后端测试 |
 | A07 | 16 KiB 边界和超出 1 字节的文件，使用多字节文字 | 按 UTF-8 字节计量；超限在读取和解析之前拒绝；失败状态不变 | 文件输入、读取前拒绝的行为探针、存储快照 |
 | A08 | 名称含 `<b>地图</b>` 与类似 HTML 的文本 | 普通文本可见，没有新增名称派生的 HTML 元素或脚本执行 | 实际 DOM、页面与存储 |
-| A09 | 存储读 / 写抛异常；历史值为非法 JSON、非数组，或数组含坏记录 / 重复名称 | 不崩溃、不伪报成功；失败的保存、覆盖、删除、导入均不改变状态或原始字节；整个容器不可解析或非数组时阻止修改；混合坏记录时展示有效项并警告，读取不改写原始值 | 故障注入、前后快照、刷新、独立故障练习 |
+| A09 | 存储写入抛异常；历史值为非法 JSON、非数组，或数组含坏记录 / 重复名称 | 不崩溃、不伪报成功；失败的保存、覆盖、删除、导入均不改变状态或原始字节；整个容器不可解析或非数组时阻止修改；混合坏记录时展示有效项并警告，读取不改写原始值 | 故障注入、前后快照、刷新、独立故障练习；读取拒绝另见下方补充回归 |
 | A10 | 仅用键盘操作保存、选择并加载存档、取消 / 确认对话框；窄屏 | 控件有可识别标签，焦点可见，可完成主要操作；地图快捷键不抢表单按键 | 实际键盘事件、焦点与布局检查 |
 | A11 | 原求解、路线回放、分类 / 样本操作；地图加载后的状态 | 旧行为仍可用；改变地图清空旧对比；分类预测后仍需明确确认才移动；不得将样本放入地图存档 | 浏览器、原项目 Python 测试、真实 HTTP |
 | A12 | 导出 A，在空浏览器上下文中导入 A，再加载；名称含内部换行时再保存和导出 | 文件为严格单地图对象；精确保留契约允许的名称和网格，包括名称内部的换行字符；不带训练样本、页面状态或云同步假设 | 真下载文件、另一上下文的真实导入、名称往返 |
@@ -84,6 +82,16 @@ python -m unittest discover -s projects/robot_playground -p "test_*.py" -v
 python -m unittest teacher_reference.robot_map_portfolio.tests.test_acceptance -v
 ```
 
+## 教师参考的存储权限补充回归
+
+```bash
+python -m unittest teacher_reference.robot_map_portfolio.tests.test_storage_access -v
+```
+
+这是 **2 个额外的教师回归测试**，不增加或改写学生 A01—A12 的必做条件。第一项在启动前让 `localStorage` 属性访问抛出 `SecurityError`，验证页面仍能编辑和导出，失败保存不影响已有数据；第二项在运行中让指定键的 `getItem` 抛错，依次尝试新名称保存、同名保存、加载、导入和确认删除。这里的同名保存会在读取阶段被拒绝，不代表验证了确认覆盖后权限再次变化的情形。两项均检查故障实际触发、旧数据字节保留，并在撤销注入后验证普通操作恢复，无需清空存档。
+
+浏览器标准允许存储属性因策略拒绝而抛出 `SecurityError`；这与 `setItem` 写入失败是不同路径，依据见 [WHATWG Web storage](https://html.spec.whatwg.org/multipage/webstorage.html#dom-localstorage-dev)。补充回归只在测试浏览器中注入，不要求修改日常浏览器权限。
+
 ## 独立验收怎么记录
 
 学生先自查；同学或教师至少另选 3 个反例独立执行，优先包含一个无效文件、一个取消操作和一个存储失败。人工步骤应使用清楚记录的浏览器来源和隔离测试数据，不能靠之前已保存的记录碰巧通过。
@@ -112,3 +120,5 @@ python teacher_reference/robot_map_portfolio/tools/check_fault.py
 增加 `--browser` 可在临时副本中同时运行真实 HTTP 浏览器 A09 的通过—失败—通过过程。基线和恢复后执行完整 A09；故障阶段追加 `--failfast`，要求恰好出现 A09 内 `save` 子测试的断言失败，避免故障造成的虚假列表污染后续子测试准备。后续未执行子测试不计为通过。浏览器配置沿用同一环境的 Playwright 与 `PLAYWRIGHT_CHROMIUM_EXECUTABLE`。这个选项仍不能代替全部 12 项验收。
 
 故障在参考实现中默认不启用；[学生任务](exercises/storage-write-failure/STUDENT.md) 和 [教师解析](exercises/storage-write-failure/TEACHER.md) 分开提供。只在隔离副本或工作树启用补丁，不改学生起点，不把坏实现提交到参考实现的正常分支。
+
+故障工具的中文输出统一为 UTF-8。`tests/test_fault_tool.py` 在强制旧编码的重定向子进程中检查完整三阶段结果及缺少依赖时的错误信息；工作流分别在 Ubuntu 与 Windows 运行它。测试控制输出条件，不将编码错误当成已经抓住业务故障。

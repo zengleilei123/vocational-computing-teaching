@@ -8,12 +8,25 @@
 
 ## 1. 准备环境与自己的服务
 
-基础网页运行仍只需 Python 3.10+ 与普通浏览器；下面是可选的自动浏览器检查依赖。使用与启动工程相同的 Python，Windows 可将 `python` 统一换成 `py -3`，macOS/Linux 可用 `python3`。
+基础网页运行仍只需 Python 3.10+ 与普通浏览器；下面是可选的自动浏览器检查依赖。建议在作品根目录建立虚拟环境。先用已确认可用的 Python 创建环境，后续安装与验收始终使用该环境中的解释器，避免把依赖装进另一个 Python。
+
+Windows PowerShell（创建环境时，`python` 可换成 `py -3`）：
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install "playwright==1.57.0"
+.\.venv\Scripts\python.exe -m playwright install chromium
+```
+
+macOS/Linux（创建环境时，`python3` 可换成已确认的 `python`）：
 
 ```bash
-python -m pip install "playwright==1.57.0"
-python -m playwright install chromium
+python3 -m venv .venv
+./.venv/bin/python -m pip install "playwright==1.57.0"
+./.venv/bin/python -m playwright install chromium
 ```
+
+这些命令直接调用虚拟环境的解释器，无需激活脚本。下文验收命令中的 `python` 相应换成 `.\.venv\Scripts\python.exe` 或 `./.venv/bin/python`。如果提示 `externally-managed-environment`，先核对是否误用了系统 Python；本流程不需要覆盖系统包管理保护。环境隔离依据见 [S7](SOURCES.md)。
 
 已有兼容 Chromium 时可设置 `PLAYWRIGHT_CHROMIUM_EXECUTABLE` 指向其可执行文件。运行器不会自动下载浏览器、安装依赖或修改浏览器配置；缺依赖应记录原始错误。首次安装需要联网，之后自动操作针对本机服务。
 
@@ -113,7 +126,7 @@ python -m unittest discover -s projects/robot_playground -p "test_*.py" -v
 | A02 | 空白名称、41 码点拒绝及合法名称边界；失败保留已有状态 |
 | A03 | 同名时明确拒绝／改名提示或确认覆盖；取消不得改写原记录 |
 | A04 | 取消删除后记录仍可加载，确认操作只影响目标地图 |
-| A05 | 非法 JSON、版本或顶层结构被拒绝；可读错误，旧状态不变 |
+| A05 | 非法 UTF-8、JSON、导入名称、版本或顶层结构被拒绝；可读错误，旧状态不变；合法 U+FFFD 名称可导入并刷新加载 |
 | A06 | 非法地图结构被拒绝，合法几何边界与无解地图按契约处理 |
 | A07 | 16,384 字节与 16,385 字节边界，观察超过上限时是否在解析前拒绝 |
 | A08 | 类似 HTML 的名称作为普通文本显示，不出现名称派生的 HTML 或脚本执行 |
@@ -123,6 +136,8 @@ python -m unittest discover -s projects/robot_playground -p "test_*.py" -v
 | A12 | 实际下载单地图 JSON，在空上下文导入、加载，检查名称与网格往返 |
 
 **A07 保持“解析前拒绝”。** 它不要求学生像教师实现一样在读取文件前拒绝。当前探针观察页面主上下文的 `JSON.parse`；自定义解析器、Worker 或其他绕过该探针的路径须结合学生代码、断点或自编测试补证，不能因探针未观察到解析就宣称所有路径均已证明。
+
+**A05 区分文件字节和解码后的字符。** 不能因为宽松解码后的文本能通过 `JSON.parse`，就认定原文件是合法 UTF-8。测试使用名称中含非法字节、其他结构合法的输入，并检查失败后原始存档和页面不变；同时接受合法编码的 `�`（U+FFFD）名称，避免误拒合法字符。原始学生包的 `fixtures/invalid-utf8.json` 可用于手动复现，请直接导入，不先经编辑器重新保存。技术依据见 [S6](SOURCES.md)。
 
 **A09 不规定教师的存储封装。** 当前自动输入覆盖保存、导入、确认删除，以及启用覆盖策略时的覆盖写入失败；还会把已写入的键逐个替换为无法解析的 JSON，要求页面可用、不抛未处理异常、不改写原始历史字节。损坏历史可明确提示或忽略坏记录，按任务书保留这两种策略。此用例不假定内部容器是数组，也不要求学生复制教师的混合坏记录恢复方式；它没有模拟读取 API 本身抛异常。
 
@@ -167,6 +182,8 @@ python -m unittest acceptance.robot_portfolio.tests.test_integration -v
 
 第一条使用标准库检查报告、目标配置、零测试、跳过及部分运行等情况。第二条需要上述浏览器依赖与 Git，自动使用随机本机端口和临时副本。它验证三组完整 A01—A12：原教师适配、改名控件／对象容器／私有 JS 状态、原生确认／拒绝重名。变体还覆盖缓存存储方法、成功操作更新元数据、中文否定错误提示和坏历史只读模式；这些都是验收器的校准输入，不是真实学生试教结果。
 
-负对照要求原始学生起点不能通过、错误 URL／源码不一致／误指教师页必须被阻止，以及现有存储故障补丁使 A09 失败、反向应用后恢复通过。这里的“对照测试通过”包含预期业务失败，不能把故障副本的 A09 写成已通过。
+负对照要求原始学生起点不能通过、错误 URL／源码不一致／误指教师页必须被阻止，以及现有存储故障补丁使 A09 失败、反向应用后恢复通过。编码负对照另在临时教师副本中放宽 UTF-8 解码，要求 A05 抓住错误，恢复严格解码后再通过。这里的“对照测试通过”包含预期业务失败，不能把故障副本的 A05 或 A09 写成已通过。
+
+导航回归另挂起一张同源图片，验证首次打开与刷新在必要控件和地图就绪后可以继续，不强等整页 `load`。它保留原超时和全部就绪断言，不通过延长等待或跳过状态检查掩盖失败。完整工具集成套件现有 9 个方法，与学生的 12 个 A 编号是不同计数。
 
 `Student target acceptance harness` 工作流执行这些检查；浏览器对照报告作为 `student-acceptance-harness-evidence` 保存 14 天。实际结果以对应提交的 Actions 为准。普通本机自测默认清理临时报告；如需保留，在运行第二条命令前设置 `ROBOT_ACCEPTANCE_TEST_EVIDENCE` 为一个新的证据目录。每次使用新目录，避免和旧结果混合。

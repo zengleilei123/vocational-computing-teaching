@@ -195,6 +195,11 @@ def fixture_files():
     }
     files = {f'fixtures/{name}': json_bytes(value) for name, value in documents.items()}
     files['fixtures/invalid-json.json'] = b'{"version": 1,\n'
+    # Only the name's byte sequence is invalid. A replacement decoder would
+    # produce otherwise valid JSON, so JSON syntax checks alone cannot reject it.
+    files['fixtures/invalid-utf8.json'] = (
+        b'{"version":1,"name":"invalid-\xff","grid":["S..",".#.","..G"]}\n'
+    )
     boundary = json_bytes(document(name='字节边界地图'))
     files['fixtures/boundary-16384.json'] = boundary + b' ' * (16384 - len(boundary))
     files['fixtures/oversize-16385.json'] = boundary + b' ' * (16385 - len(boundary))
@@ -208,6 +213,7 @@ def fixture_files():
 |---|---|---|
 | valid-map.json | 合法 3×3 地图 | 按契约恢复名称与网格 |
 | invalid-json.json | JSON 语法损坏 | 可读错误，当前地图和存档不变 |
+| invalid-utf8.json | 名称内有非法 UTF-8 字节 `FF`；其余 JSON 结构合法 | 拒绝编码错误，当前地图和存档不变 |
 | unknown-version.json | version 为 2 | 拒绝未知版本，原状态不变 |
 | missing-goal.json | 缺少 G | 拒绝，原状态不变 |
 | duplicate-start.json | 两个 S | 拒绝，原状态不变 |
@@ -219,6 +225,8 @@ def fixture_files():
 
 两个字节边界文件来自相同的合法 JSON，差别只有一个尾随空格；
 JSON 结构本身都合法。名称的 Unicode 码点与文件的 UTF-8 字节是不同约束。
+`invalid-utf8.json` 要直接作为文件导入；用编辑器打开再保存可能替换坏字节，改变测试条件。
+合法 UTF-8 编码的 `�`（U+FFFD）本身可以出现在名称中，不能靠查找这个字符判断文件编码是否损坏。
 只观察页面拒绝结果不能证明检查发生于解析前；请用自己的测试或调试证据验证顺序。
 测试时另行构造空名称、41 码点、取消覆盖/删除和存储失败等反例。
 

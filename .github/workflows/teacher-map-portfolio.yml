@@ -45,6 +45,22 @@ jobs:
         run: python -m unittest discover -s projects/robot_playground -p 'test_*.py' -v
       - name: Prove the deliberate fault is detected and reversible
         run: python -m teacher_reference.robot_map_portfolio.tools.check_fault
+      - name: Preserve fault evidence through Windows-style redirected encodings
+        run: python -m unittest teacher_reference.robot_map_portfolio.tests.test_fault_tool -v
+
+  windows-fault-evidence:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check redirected fault evidence and dependency errors on Windows
+        run: python -m unittest teacher_reference.robot_map_portfolio.tests.test_fault_tool -v
 
   independent-browser-acceptance:
     runs-on: ubuntu-24.04
@@ -60,5 +76,7 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Execute all twelve independent acceptance scenarios on real HTTP
         run: python -m unittest teacher_reference.robot_map_portfolio.tests.test_acceptance -v
+      - name: Check denied storage access and recovery without deleting archives
+        run: python -m unittest teacher_reference.robot_map_portfolio.tests.test_storage_access -v
       - name: Preserve original browser regression
         run: python -m projects.robot_playground.tools.browser_smoke

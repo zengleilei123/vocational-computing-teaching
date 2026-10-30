@@ -182,6 +182,10 @@ class PortfolioCases(unittest.TestCase):
     def test_A05_invalid_documents_preserve_state(self):
         invalid = {
             'invalid JSON': b'{not json',
+            # These byte streams have a valid JSON structure if a permissive
+            # decoder silently substitutes U+FFFD. Reject the encoding itself.
+            'invalid UTF-8 byte': b'{"version":1,"name":"bad\xff","grid":["S..",".#.","..G"]}',
+            'UTF-8 encoded surrogate': b'{"version":1,"name":"bad\xed\xa0\x80","grid":["S..",".#.","..G"]}',
             'unknown version': {**document(), 'version': 2},
             'boolean version': {**document(), 'version': True},
             'string version': {**document(), 'version': '1'},
@@ -190,6 +194,9 @@ class PortfolioCases(unittest.TestCase):
             'missing field': {'version': 1, 'name': '缺地图'},
             'extra field': {**document(), 'train': []},
             'wrong name type': {**document(), 'name': 12},
+            'blank imported name': document(' \t\r\n '),
+            '41 code point imported name': document('中' * 41),
+            '41 supplementary code point imported name': document('🧭' * 41),
             'wrong grid type': {**document(), 'grid': 'S..\n.#.\n..G'},
         }
         for index, (label, payload) in enumerate(invalid.items()):
@@ -199,6 +206,15 @@ class PortfolioCases(unittest.TestCase):
             app.error()
             self.assert_preserved(app, before, f'Invalid document changed state: {label}')
             app.close()
+        # U+FFFD is a legal name character when its bytes are valid UTF-8.
+        # Looking for that character is not a valid substitute for decoding.
+        app = self.new_app()
+        for name in ('合法替换字符 �', '🧭' * 40):
+            app.upload(document('  ' + name + '  ', MAP_B))
+            app.wait_saved(name)
+            app.wait_grid(MAP_B)
+            app.reload()
+            app.load(name, MAP_B)
 
     def test_A06_grid_contract_and_boundaries(self):
         invalid = {
